@@ -1,0 +1,24 @@
+@name Made by XoXFaby
+@inputs 
+@outputs 
+@persist A:array
+@trigger
+
+runOnTick(1)
+
+if(first()){
+findByClass("player")
+A = findToArray()
+}
+
+foreach(K,V:entity=A)
+{
+    
+    if(V:aimEntity() == entity() && V != owner())
+    {
+        print(V:name() + " is looking at the chip")
+    }
+}
+
+Epic = "Code"
+#lol

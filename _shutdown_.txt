@@ -1,0 +1,264 @@
+@name Trig4
+@inputs 
+@outputs 
+@persist E:entity A B TT Vec1:vector Vec2:vector Mode1:string OVec1:vector NVec1:vector T1 Mode2:string OVec2:vector NVec2:vector T2 Sounds:table Idle
+@trigger 
+
+if(owner():keyAttack2())
+{
+    SMult = 1 
+     
+    Int = 75
+} elseif(owner():keyUse())
+{
+    SMult = 1
+
+    Int = 150 
+}else
+{
+    SMult = 1
+
+    Int = 100
+}
+
+TT+=4 * SMult
+RD = rangerOffset(holoEntity(1):pos(),holoEntity(1):pos() + vec(0,0,-1000))
+GY = RD:position():z() 
+if(first())
+{
+    Sounds[1,string] = "^npc/strider/strider_step1.wav"
+    Sounds[2,string] = "^npc/strider/strider_step2.wav"
+    Sounds[3,string] = "^npc/strider/strider_step3.wav"
+    Sounds[4,string] = "^npc/strider/strider_step4.wav"
+    Sounds[5,string] = "^npc/strider/strider_step5.wav"
+    Sounds[6,string] = "^npc/strider/strider_step6.wav"
+    A = 60
+    B = 50
+    E = entity()
+    E:propNotSolid(1)
+    
+    holoCreate(1,E:pos(),vec(1,1,1),ang(0,0,0),vec(255,255,255))
+    holoAng(1,ang(0,-90,0))
+    
+    holoCreate(2,E:pos() + vec(30,0,0),vec(1,1,1),ang(0,0,0),vec(255,255,255))
+    holoParent(2,1)
+    
+    holoCreate(3,E:pos() + vec(-30,0,0),vec(1,1,1),ang(0,0,0),vec(255,255,255))
+    holoParent(3,1)
+    
+    holoCreate(100,E:pos() + vec(30,0,0),vec(1,1,1),ang(0,0,0),vec(255,255,255))
+    holoParent(100,1)
+    
+    holoCreate(101,E:pos() + vec(-30,0,0),vec(1,1,1),ang(0,0,0),vec(255,255,255))
+    holoParent(101,1)
+    
+    
+    
+    holoCreate(4,E:pos() + vec(30,0,0),vec(1,1,1),ang(0,0,0),vec(255,255,255))
+    holoParent(4,2)
+    
+    holoCreate(5,E:pos() + vec(-30,0,0),vec(1,1,1),ang(0,0,0),vec(255,255,255))
+    holoParent(5,3)
+    
+    holoCreate(6,holoEntity(5):pos() + vec(A / 2,0,0),vec(0.03,0.03,A/800),ang(-90,0,180),vec(255,255,255))
+    holoParent(6,5)
+    holoModel(6,"models/props_combine/CombineInnerwall001a.mdl")
+    
+    holoCreate(7,holoEntity(5):pos() + vec(A,0,0),vec(1,1,1),ang(0,0,0),vec(255,255,255))
+    holoParent(7,5)
+    
+    holoCreate(8,holoEntity(7):pos() + vec(B / 2,0,0),vec(0.03,0.03,B/800),ang(-90,0,180),vec(255,255,255))
+    holoParent(8,7)
+    holoModel(8,"models/props_combine/CombineInnerwall001a.mdl")
+    
+    holoCreate(9,holoEntity(7):pos() + vec(B,0,0),vec(1,1,1),ang(0,0,0),vec(255,255,255))
+    holoParent(9,7)
+    
+    holoCreate(10,holoEntity(4):pos() + vec(A / 2,0,0),vec(0.03,0.03,A/800),ang(-90,0,180),vec(255,255,255))
+    holoParent(10,4)
+    holoModel(10,"models/props_combine/CombineInnerwall001a.mdl")
+    
+    holoCreate(11,holoEntity(4):pos() + vec(A,0,0),vec(1,1,1),ang(0,0,0),vec(255,255,255))
+    holoParent(11,4)
+    
+    holoCreate(12,holoEntity(11):pos() + vec(B / 2,0,0),vec(0.03,0.03,B/800),ang(-90,0,180),vec(255,255,255))
+    holoParent(12,11)
+    holoModel(12,"models/props_combine/CombineInnerwall001a.mdl")
+    
+    holoCreate(13,holoEntity(11):pos() + vec(B,0,0),vec(1,1,1),ang(0,0,0),vec(255,255,255))
+    holoParent(13,11)
+    
+    holoAlpha(7,0)
+    holoAlpha(9,0)
+    holoAlpha(11,0)
+    holoAlpha(13,0)
+    
+
+    Vec1 = holoEntity(5):pos()
+    Vec2 = holoEntity(4):pos()
+    
+    
+    
+    holoPos(1,(Vec1 + Vec2) / 2 + vec(0,0,120))
+    
+    Mode1 = "wait"
+    Mode2 = "wait"
+}
+OffF = 0
+OffZ = 90
+if(owner():keyUse()){OffZ = 75}elseif(owner():keyAttack2()){OffZ = 85,OffF = 20}
+
+TPos = (Vec1 + Vec2) / 2 + vec(0,0,OffZ) + holoEntity(1):forward() * OffF
+holoPos(1, holoEntity(1):pos() - (holoEntity(1):pos() - TPos):normalized() * (holoEntity(1):pos() - TPos):length())
+AimA = holoEntity(1):toLocal((owner():aimPos() - holoEntity(1):pos()):toAngle())
+
+
+holoAng(1,holoEntity(1):angles() + ang(0,clamp(AimA:yaw(),-10,10),0))
+#E:setPos(holoEntity(1):pos())
+#E:setAng(holoEntity(1):angles())
+
+if(owner():keyAttack1() && owner():weapon():type() == "weapon_physgun" && Mode2 == "wait" && Mode1 == "wait")
+{
+    
+    Mode1 = "Jthink"
+    Mode2 = "Jthink"
+}
+elseif(Mode1 == "Jthink"){
+    OVec1 = Vec1
+    NVec1 = (holoEntity(3):pos() + ( holoEntity(1):forward() * 1000 * SMult )):setZ(GY)
+    Mode1 = "Jmove"   
+    OVec2 = Vec2
+    NVec2 = (holoEntity(2):pos() + ( holoEntity(1):forward() * 1000 * SMult )):setZ(GY)
+    Mode2 = "Jmove" 
+}elseif(Mode1 == "Jmove"){
+    Vec1 = mix(NVec1,OVec1,T1)
+    BezierVec = vec2(0,0)
+    BezierVec = (1-T2) ^ 2 * vec2(0,0) + 2*(1-T2)*T2*vec2(250*SMult,250*SMult)+T2^2*vec2(500,0)
+    Vec1 += vec(0,0,BezierVec:y())
+    T1 = T1 + 0.05
+    if(T1 >= 1){
+        T1 = 0
+        Mode1 = "wait"
+        Vec1 = NVec1   
+        soundPlay(1,0,Sounds[randint(1,6),string])
+    }
+    Vec2 = mix(NVec2,OVec2,T2)
+    BezierVec = vec2(0,0)
+    BezierVec = (1-T2) ^ 2 * vec2(0,0) + 2*(1-T2)*T2*vec2(250*SMult,250*SMult)+T2^2*vec2(500,0)
+    Vec2 += vec(0,0,BezierVec:y())
+    T2 = T2 + 0.05
+    if(T2 >= 1){
+        T2 = 0
+        Mode2 = "wait"
+        Vec2 = NVec2   
+        holoEntity(1):soundPlay(1,0,Sounds[randint(1,6),string])
+    }
+}
+
+
+
+
+if(Mode1 == "wait"){
+if(TT == 20)
+{
+    if(holoEntity(1):pos():distance(owner():aimPos())> 200 && owner():weapon():type() == "weapon_physgun" && !owner():keyAttack1()){
+Mode1 = "think"}
+}
+}elseif(Mode1 == "think"){
+    OVec1 = Vec1
+    NVec1 = (holoEntity(3):pos() + ( holoEntity(1):forward() * 100 * SMult )):setZ(GY)
+    Mode1 = "move" 
+}elseif(Mode1 == "move"){
+    BezierVec = vec2(0,0)
+    BezierVec = (1-T1) ^ 2 * vec2(0,0) + 2*(1-T1)*T1*vec2(70*SMult,30*SMult)+T1^2*vec2(100,0)
+    Vec1 = mix(NVec1,OVec1,BezierVec:x()/100)
+    Vec1 += vec(0,0,BezierVec:y())
+    T1 = T1 + 0.2
+    if(T1 >= 1){
+        T1 = 0
+        Mode1 = "wait"
+        Vec1 = NVec1   
+        holoEntity(1):soundPlay(1,0,Sounds[randint(1,6),string])
+    }
+    
+}
+
+
+
+
+if(Mode2 == "wait"){
+if(TT == 40)
+{
+    if(holoEntity(1):pos():distance(owner():aimPos())> 200&& owner():weapon():type() == "weapon_physgun"&& !owner():keyAttack1()){
+Mode2 = "think"}
+}
+}elseif(Mode2 == "think"){
+    OVec2 = Vec2
+    NVec2 = (holoEntity(2):pos() + ( holoEntity(1):forward() * 100 * SMult )):setZ(GY)
+    Mode2 = "move" 
+}elseif(Mode2 == "move"){
+    BezierVec = vec2(0,0)
+    BezierVec = (1-T2) ^ 2 * vec2(0,0) + 2*(1-T2)*T2*vec2(70*SMult,30*SMult)+T2^2*vec2(100,0)
+    Vec2 = mix(NVec2,OVec2,BezierVec:x()/100)
+    Vec2 += vec(0,0,BezierVec:y())
+    T2 = T2 + 0.2
+    if(T2 >= 1){
+        T2 = 0
+        Mode2 = "wait"
+        Vec2 = NVec2   
+        holoEntity(1):soundPlay(1,0,Sounds[randint(1,6),string])
+    }
+}
+
+if(Mode1 == "wait" && Mode2 == "wait")
+{
+Idle++   
+}else
+{
+Idle = 0   
+}
+
+if(0 && Idle > 5)
+{
+if(Vec1:distance(holoEntity(3):pos():setZ(GY)) > 10 ){
+    OVec1 = Vec1
+    NVec1 = holoEntity(3):pos():setZ(GY)
+    Mode1 = "move" 
+}elseif(Vec2:distance(holoEntity(2):pos():setZ(GY)) > 10 ){
+    OVec2 = Vec2
+    NVec2 = holoEntity(2):pos():setZ(GY)
+    Mode2 = "move" 
+}
+}
+
+
+
+
+
+
+C1 = min(Vec1:distance(holoEntity(5):pos()),A+B)
+C2 = min(Vec2:distance(holoEntity(4):pos()),A+B)
+
+
+A11 = acos(((A^2) + (C1^2) - (B^2)) / ( 2*A*C1 ))
+A12 = acos(((A^2) + (B^2) - (C1^2)) / ( 2*A*B ))
+
+A21 = acos(((A^2) + (C2^2) - (B^2)) / ( 2*A*C2 ))
+A22 = acos(((A^2) + (B^2) - (C2^2)) / ( 2*A*B ))
+
+AtanDir1 = holoEntity(101):toLocalAxis(holoEntity(3):pos() - Vec1)
+holoAng(3,holoEntity(1):toWorld(ang(atan(AtanDir1:x(), AtanDir1:z()),90,-atan(AtanDir1:y(),AtanDir1:z()))))    
+holoAng(5,holoEntity(3):toWorld(ang(90 - A11,90,0)))
+holoAng(7,holoEntity(5):toWorld(ang(180 - A12,0,0)))
+
+
+AtanDir2 = holoEntity(100):toLocalAxis(holoEntity(2):pos() - Vec2)
+holoAng(2,holoEntity(1):toWorld(ang(atan(AtanDir2:x(), AtanDir2:z()),90,-atan(AtanDir2:y(),AtanDir2:z()))))  
+holoAng(4,holoEntity(2):toWorld(ang(90 - A21,90,0)))
+holoAng(11,holoEntity(4):toWorld(ang(180 - A22,0,0)))
+
+if(TT == 40){TT = 0}
+
+
+
+interval(Int)

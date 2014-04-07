@@ -1,0 +1,49 @@
+@name 
+@inputs ASG:wirelink
+@outputs 
+@persist Allow:array
+@trigger 
+
+runOnTick(1)
+
+ASG["Send",normal] = 0
+
+function teleport(Origin:vector,Targ:vector,Pl:normal)
+{
+    ASG["Origin",vector] = Origin
+    ASG["Dest",vector] = Targ
+    ASG["Teleport Everything",normal] = Pl   
+    ASG["Send",normal] = 1    
+}
+
+if(first())
+{
+    Allow[1,entity] = owner()
+    
+    
+}
+
+if(findCanQuery())
+{
+    findInSphere(entity():pos(), 200)
+    Find = findToArray()
+    foreach(K, V:entity=Find)
+    {
+        if(V:isPlayer())
+        {
+            BeamOut = 1
+            foreach(II, VV:entity=Allow)
+            {
+                if(V == VV){ BeamOut = 0 }   
+            }
+            if(BeamOut == 1)
+            {
+                teleport(V:pos(),vec(0,0,0),0)
+            }
+        } 
+        
+    }
+    
+    
+       
+}

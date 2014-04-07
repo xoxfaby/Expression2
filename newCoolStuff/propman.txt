@@ -1,0 +1,41 @@
+@name 
+@inputs
+@outputs 
+@persist Props:array Mr:entity Props2:array
+@trigger 
+
+if(first())
+{
+Mr = findPlayerByName("")   
+}
+
+findByClass("prop_physics") 
+Props = findToArray()  
+if(first()){
+foreach(K,V:entity=Props){
+if(V:owner() == Mr)
+{
+Props2[K,entity]= V
+}}
+}else{
+foreach(K,V:entity=Props2){ 
+if( V:owner() == Mr)
+{
+V:propFreeze(0)
+V:propGravity(0)
+V:propNotSolid(0)
+#V:setPos(owner():pos()+vec(0,0,100))
+#V:setAng(randvec():toAngle())
+}
+else
+{
+
+}
+   
+}
+ 
+selfDestruct()
+}
+
+interval(1000)
+

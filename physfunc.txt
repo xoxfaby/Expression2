@@ -1,0 +1,34 @@
+@name physfunc
+@inputs
+@outputs 
+@persist 
+@trigger 
+
+function void entity:applyQuatTorque(Mult,Ang:angle,Friction){
+    This:applyTorque((Mult*This:toLocal(rotationVector(quat(Ang-This:angVel()/Friction)/quat(This))+This:pos()) - This:angVelVector())*This:inertia())
+}
+
+function void entity:applyForceHeight(Base,RideHeight,Mult,Friction:vector){
+    This:applyForce(((vec(0,0,Base+RideHeight) - vec(0,0,This:pos():z()))*Mult-(This:vel())/Friction)*(This:mass()))
+}
+
+function void entity:applyQuatTorque2(Mult,Ang:angle,Friction)
+{
+    This:applyTorque((Mult*This:toLocal(rotationVector(quat(Ang)/quat(This))+This:pos())-Friction*This:angVelVector())*This:inertia())  
+}
+
+function void entity:applyAngTorque(Power,Damping,Inertia:angle,Angle:angle)
+{
+    #Much credit to Steve for this.q
+    This:applyAngForce((This:toLocal(Angle)* Power - This:angVel() * Damping) * Inertia)
+}
+function wirelink:initScreen(Res) {
+    This[1048574]=0 #Reset
+    This[1048569]=3
+    This[1048572]=Res #Y
+    This[1048573]=Res #X
+    This[1048575]=1
+}   
+function wirelink:drawPixel(X,Y,Res,Color:vector) {
+    This[X+Y*Res]=rgb2digi(Color,3)
+}

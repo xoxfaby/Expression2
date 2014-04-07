@@ -1,0 +1,21 @@
+@name 
+@inputs Input
+@outputs Output
+@persist DelayInput
+@trigger 
+
+if(DelayInput == 1){
+Output = 1
+DelayInput = 0
+}
+else
+{
+DelayInput = Input
+if(Input)
+{
+interval(3000)   
+}else
+{
+Output = 0   
+}
+}

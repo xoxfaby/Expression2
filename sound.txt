@@ -1,0 +1,13 @@
+@name 
+@inputs 
+@outputs 
+@persist Sound:string
+@trigger 
+
+if(first()){
+Sound = "acf_extra/tankfx/guns/120mm.wav"   
+}
+
+soundPlay(1,soundDuration(Sound),Sound)
+
+interval(soundDuration(Sound)*1000)

@@ -1,0 +1,109 @@
+@name FAVChip
+@inputs Pod:wirelink SetAng:wirelink Engine:wirelink Gun1:wirelink Gun2:wirelink Pod2:wirelink Pod3:wirelink
+@outputs E:entity Damping Constant LengthF LengthB T Active Gear One Fire
+@persist E:entity Steer Base:entity OK Back OKT
+@trigger 
+
+runOnTick(1)
+
+if(first() || dupefinished())
+{
+    Gun1["Unload",number] = 1
+    Gun2["Unload",number] = 1
+    E = entity()
+    holoCreate(1,E:pos() + vec(-33,12,18))
+    holoModel(1,"models/sprops/trans/stwheels/stwheel_3.mdl")
+    holoAng(1,ang(-15,180,0))
+    holoScale(1,vec(0.9,0.9,0.9))
+    holoColor(1,vec(0,30,0))
+    holoParent(1,E) 
+    Base = E:isWeldedTo() 
+    LengthF = 30
+    LengthB=37
+    Constant = 50000
+    Damping = 3000
+    Gear = 1
+    
+    holoCreate(2)
+    holoCreate(3)
+    holoPos(2,E:pos() + vec(-15,-10,22))
+    holoPos(3,E:pos() + vec(-60,0,47))
+    holoParent(2,E)
+    holoParent(3,E)
+    holoAlpha(2,0)
+    holoAlpha(3,0)
+}
+
+    Gun1["Unload",number] = 0
+    Gun2["Unload",number] = 0
+
+holoAng(1,E:toWorld(ang(-15,180,Steer * 2)))
+
+if(Pod["A",number] && !Pod["D",number]){Steer++}elseif(Pod["D",number] && !Pod["A",number]){Steer--}elseif(!Pod["D",number] && !Pod["A",number])
+{
+if(Steer > 0){Steer--}elseif(Steer<0){Steer++}   
+}
+if(Steer > 35){Steer = 35}elseif(Steer < -35){Steer = -35}
+
+SetAng["Steer",number] = Steer
+
+SetAng["E",entity] = E
+SetAng["Base",entity] = Base
+
+T = Pod["W",number] * 100
+Active = Pod["Active",number]
+
+RPM = Engine["RPM",number]
+
+if( RPM > 4800 && OK && !Back){
+    
+Gear++
+OK = 0
+OKT = 0
+    
+}elseif( RPM < 2400 && OK && !Back){
+
+Gear--
+OK = 0
+OKT = 0
+
+}
+
+if(OKT > 20){
+ OK = 1   
+}
+OKT++
+
+
+
+Gear = clamp(Gear,1,5)
+
+
+Gun1:entity():setPos(holoEntity(2):pos())
+if(Pod2["Active",number]){
+Gun1:entity():setAng( ang(-Pod2["Elevation",number],Pod2["Bearing",number],0) )
+}else{
+Gun1:entity():setAng( Base:angles() + ang(0,180,0))
+}
+
+Gun2:entity():setPos(holoEntity(3):pos())
+if(Pod3["Active",number]){
+Gun2:entity():setAng( ang(-Pod3["Elevation",number],Pod3["Bearing",number],0) )
+}else{
+Gun2:entity():setAng( Base:angles() + ang(0,180,0))
+}
+
+One = 1
+
+Gun1["Fire",number] = Pod2["Mouse1",number]
+Gun2["Fire",number] = Pod3["Mouse1",number]
+
+if(Gun1["ShotsLeft",number] < 1){
+Gun1["Reload",number] = 1
+} else { Gun1["Reload",number] = 0 }
+
+if(Gun2["ShotsLeft",number] < 1){
+Gun2["Reload",number] = 1
+} else { Gun2["Reload",number] = 0 }
+
+Fire = 1

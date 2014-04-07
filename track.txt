@@ -1,0 +1,16 @@
+@name 
+@inputs 
+@outputs X Y Z E:entity
+@persist 
+@trigger 
+
+runOnTick(1)
+
+if(findCanQuery()){
+findByModel("sg_vehicle_f302")
+Targ = find()
+X = Targ:pos():x()
+Y = Targ:pos():y()
+Z = Targ:pos():z()
+E = Targ
+}

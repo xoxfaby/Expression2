@@ -1,0 +1,379 @@
+@name Miata Guages
+@inputs Active Gear RPM Light
+@outputs MPH Lights Color:vector
+#####
+# Holograms authored by Vicious713 on 02/09/2012
+# Exported from Holopad 28/08/2012 by Bubbus
+# Thanks to Wrex for lots of E2 Wizardry
+##### 
+
+#####
+# Hologram spawning data
+@persist [Holos Clips]:table HolosSpawned HolosStep LastHolo TotalHolos
+@persist E:entity  I
+if(dupefinished()) {reset()}
+if(first()){
+    runOnTick(1)
+    E = entity()
+}
+
+
+#### Change Variables Here ####
+RPM_Max = 7500
+
+#### Math ####
+if (changed(Light)&Light){Lights=!Lights}
+
+RPM_Ang = ((RPM/RPM_Max)*-270)*Active
+
+#MPH = toUnit("mph",E:vel():length())
+MPH = E:vel():length()/17.6
+    
+    MPH_Ang = ((MPH/160)*-270)*Active
+#####
+
+if (first() | duped())
+{
+    E = entity()
+
+    function number addHolo(Pos:vector, Scale:vector, Colour:vector4, Angles:angle, Model:string, Material:string, Parent:number)
+    {
+  #      if (holoRemainingSpawns() < 1) {error("This model has too many holos to spawn! (" + TotalHolos + " holos!)"), return 0}
+        
+        holoCreate(LastHolo, E:toWorld(Pos), Scale, E:toWorld(Angles))
+        holoModel(LastHolo, Model)
+        holoMaterial(LastHolo, Material)
+        holoColor(LastHolo, vec(Colour), Colour:w())
+
+        if (Parent > 0) {holoParent(LastHolo, Parent)}
+        else {holoParent(LastHolo, E)}
+
+        local Key = LastHolo + "_"
+        local I=1
+        while (Clips:exists(Key + I))
+        {
+            holoClipEnabled(LastHolo, 1)
+            local ClipArr = Clips[Key+I, array]
+            holoClip(LastHolo, I, holoEntity(LastHolo):toLocal(E:toWorld(ClipArr[1, vector])), holoEntity(LastHolo):toLocalAxis(E:toWorldAxis(ClipArr[2, vector])), 0)
+            I++
+        }
+        
+        return LastHolo
+    }
+
+##########
+# HOLOGRAMS
+#[ Needles ]#
+    
+    #[ MPH_Needle ]#
+        Holos[1, array] = array(vec(0.0000, -4.0000, 0.5000), vec(0.3500, 0.0300, 0.0200), vec4(255, 255, 255, 255), ang(-0.0000, 0.0000, 0), "tetra", "models/debug/debugwhite", 0)
+
+    #[ RPM_Needle ]#
+        Holos[2, array] = array(vec(0.0000, 4.0000, 0.5000), vec(0.3500, 0.0300, 0.0200), vec4(255, 255, 255, 255), ang(-0.0000, 0.0000, 0), "tetra", "models/debug/debugwhite", 0)
+    
+#[ MPH Guage ]#
+
+    #[ MPH_Min_Tick ]#
+        Holos[3, array] = array(vec(0.0000, -4.0000, 0.3500), vec(0.4500, 0.0100, 0.0100), vec4(255, 255, 255, 255), ang(0.0000, 0.0000, 0.0000), "plane", "", 0)
+            Clips["3_1", array] = array(vec(-2.0141, -4.0000, 0.3500), vec(-1.0000, -0.0000, 0.0000))
+    #[ MPH_1K_Tick ]#
+        Holos[4, array] = array(vec(0.0000, -4.0000, 0.3500), vec(0.4500, 0.0100, 0.0100), vec4(255, 255, 255, 255), ang(0.0000, -33.7500, 0.0000), "plane", "", 0)
+            Clips["4_1", array] = array(vec(-1.6746, -2.8810, 0.3500), vec(-0.8315, 0.5556, -0.0000))
+    #[ MPH_2K_Tick ]#
+        Holos[5, array] = array(vec(0.0000, -4.0000, 0.3500), vec(0.4500, 0.0100, 0.0100), vec4(255, 255, 255, 255), ang(0.0000, -67.5000, 0.0000), "plane", "", 0)
+            Clips["5_1", array] = array(vec(-0.7707, -2.1392, 0.3500), vec(-0.3827, 0.9239, -0.0000))
+    #[ MPH_3K_Tick ]# 
+        Holos[6, array] = array(vec(0.0000, -4.0000, 0.3500), vec(0.4500, 0.0100, 0.0100), vec4(255, 255, 255, 255), ang(0.0000, -101.2500, 0.0000), "plane", "", 0)
+            Clips["6_1", array] = array(vec(0.3929, -2.0246, 0.3500), vec(0.1951, 0.9808, -0.0000))
+    #[ MPH_4K_Tick ]#
+        Holos[7, array] = array(vec(0.0000, -4.0000, 0.3500), vec(0.4500, 0.0100, 0.0100), vec4(255, 255, 255, 255), ang(0.0000, -135.0000, 0.0000), "plane", "", 0)
+            Clips["7_1", array] = array(vec(1.4242, -2.5758, 0.3500), vec(0.7071, 0.7071, -0.0000))
+    #[ MPH_5K_Tick ]#
+        Holos[8, array] = array(vec(0.0000, -4.0000, 0.3500), vec(0.4500, 0.0100, 0.0100), vec4(255, 255, 255, 255), ang(0.0000, -168.7500, 0.0000), "plane", "", 0)
+            Clips["8_1", array] = array(vec(1.9754, -3.6071, 0.3500), vec(0.9808, 0.1951, -0.0000))
+    #[ MPH_6K_Tick ]#
+        Holos[9, array] = array(vec(0.0000, -4.0000, 0.3500), vec(0.4500, 0.0100, 0.0100), vec4(255, 255, 255, 255), ang(0.0000, -202.5000, 0.0000), "plane", "", 0)
+            Clips["9_1", array] = array(vec(1.8608, -4.7707, 0.3500), vec(0.9239, -0.3827, -0.0000))
+    #[ MPH_7K_Tick ]#
+        Holos[10, array] = array(vec(0.0000, -4.0000, 0.3500), vec(0.4500, 0.0100, 0.0100), vec4(255, 255, 255, 255), ang(0.0000, -236.2500, 0.0000), "plane", "", 0)
+            Clips["10_1", array] = array(vec(1.1190, -5.6746, 0.3500), vec(0.5556, -0.8315, -0.0000))
+    #[ MPH_Max_Tick ]#
+        Holos[11, array] = array(vec(0.0000, -4.0000, 0.3500), vec(0.4500, 0.0100, 0.0100), vec4(255, 255, 255, 255), ang(0.0000, 90.0000, 0.0000), "plane", "", 0)
+            Clips["11_1", array] = array(vec(0.0000, -6.0141, 0.3500), vec(0.0000, -1.0000, -0.0000))
+
+
+    #[ MPH_0 ]#
+        Holos[12, array] = array(vec(-1.6450, -4.0000, 0.3200), vec(0.0300, 0.0250, 0.0323), vec4(255, 255, 255, 255), ang(0.0000, 90.0000, 90.0000), "models/sprops/misc/alphanum/alphanum_0.mdl", "models/debug/debugwhite", 0)
+    #[ MPH_20 ]#
+        Holos[13, array] = array(vec(-1.3282, -2.9580, 0.3200), vec(0.0300, 0.0250, 0.0323), vec4(255, 255, 255, 255), ang(0.0000, 90.0000, 90.0000), "models/sprops/misc/alphanum/alphanum_2.mdl", "models/debug/debugwhite", 0)
+    #[ MPH_20 ]#
+        Holos[14, array] = array(vec(-1.3282, -3.2365, 0.3200), vec(0.0300, 0.0250, 0.0323), vec4(255, 255, 255, 255), ang(0.0000, 90.0000, 90.0000), "models/sprops/misc/alphanum/alphanum_0.mdl", "models/debug/debugwhite", 0)
+    #[ MPH_40 ]#
+        Holos[15, array] = array(vec(-0.6362, -2.4479, 0.3200), vec(0.0300, 0.0250, 0.0323), vec4(255, 255, 255, 255), ang(0.0000, 90.0000, 90.0000), "models/sprops/misc/alphanum/alphanum_4.mdl", "models/debug/debugwhite", 0)
+    #[ MPH_40 ]#
+        Holos[16, array] = array(vec(-0.6362, -2.7414, 0.3200), vec(0.0300, 0.0250, 0.0323), vec4(255, 255, 255, 255), ang(0.0000, 90.0000, 90.0000), "models/sprops/misc/alphanum/alphanum_0.mdl", "models/debug/debugwhite", 0)
+    #[ MPH_60 ]#
+        Holos[17, array] = array(vec(0.3517, -2.2439, 0.3200), vec(0.0300, 0.0250, 0.0323), vec4(255, 255, 255, 255), ang(0.0000, 90.0000, 90.0000), "models/sprops/misc/alphanum/alphanum_6.mdl", "models/debug/debugwhite", 0)    
+    #[ MPH_60 ]#
+        Holos[18, array] = array(vec(0.3517, -2.5730, 0.3200), vec(0.0300, 0.0250, 0.0323), vec4(255, 255, 255, 255), ang(0.0000, 90.0000, 90.0000), "models/sprops/misc/alphanum/alphanum_0.mdl", "models/debug/debugwhite", 0)
+    #[ MPH_80 ]#
+        Holos[19, array] = array(vec(1.1871, -2.6734, 0.3200), vec(0.0300, 0.0250, 0.0323), vec4(255, 255, 255, 255), ang(0.0000, 90.0000, 90.0000), "models/sprops/misc/alphanum/alphanum_8.mdl", "models/debug/debugwhite", 0)
+    #[ MPH_80 ]#
+        Holos[20, array] = array(vec(1.1871, -3.0010, 0.3200), vec(0.0300, 0.0250, 0.0323), vec4(255, 255, 255, 255), ang(0.0000, 90.0000, 90.0000), "models/sprops/misc/alphanum/alphanum_0.mdl", "models/debug/debugwhite", 0)
+    #[ MPH_100 ]#
+        Holos[21, array] = array(vec(1.6299, -3.0674, 0.3200), vec(0.0300, 0.0250, 0.0323), vec4(255, 255, 255, 255), ang(0.0000, 90.0000, 90.0000), "models/sprops/misc/alphanum/alphanum_1.mdl", "models/debug/debugwhite", 0)
+    #[ MPH_100 ]#
+        Holos[22, array] = array(vec(1.6299, -3.3674, 0.3200), vec(0.0300, 0.0250, 0.0323), vec4(255, 255, 255, 255), ang(0.0000, 90.0000, 90.0000), "models/sprops/misc/alphanum/alphanum_0.mdl", "models/debug/debugwhite", 0)
+    #[ MPH_100 ]#
+        Holos[23, array] = array(vec(1.6299, -3.6945, 0.3200), vec(0.0300, 0.0250, 0.0323), vec4(255, 255, 255, 255), ang(0.0000, 90.0000, 90.0000), "models/sprops/misc/alphanum/alphanum_0.mdl", "models/debug/debugwhite", 0)
+    #[ MPH_120 ]#
+        Holos[24, array] = array(vec(1.5154, -4.1190, 0.3200), vec(0.0300, 0.0250, 0.0323), vec4(255, 255, 255, 255), ang(0.0000, 90.0000, 90.0000), "models/sprops/misc/alphanum/alphanum_1.mdl", "models/debug/debugwhite", 0)
+    #[ MPH_120 ]#
+        Holos[25,array] = array(vec(1.5154, -4.4190, 0.3200), vec(0.0300, 0.0250, 0.0323), vec4(255, 255, 255, 255), ang(0.0000, 90.0000, 90.0000), "models/sprops/misc/alphanum/alphanum_2.mdl", "models/debug/debugwhite", 0)
+    #[ MPH_120 ]#
+        Holos[26, array] = array(vec(1.5154, -4.7435, 0.3200), vec(0.0300, 0.0250, 0.0323), vec4(255, 255, 255, 255), ang(0.0000, 90.0000, 90.0000), "models/sprops/misc/alphanum/alphanum_0.mdl", "models/debug/debugwhite", 0)
+    #[ MPH_140 ]#
+        Holos[27, array] = array(vec(0.9406, -4.7, 0.3200), vec(0.0300, 0.0250, 0.0323), vec4(255, 255, 255, 255), ang(0.0000, 90.0000, 90.0000), "models/sprops/misc/alphanum/alphanum_1.mdl", "models/debug/debugwhite", 0)    
+    #[ MPH_140 ]#
+        Holos[28,array] = array(vec(0.9406, -5.0802, 0.3200), vec(0.0300, 0.0250, 0.0323), vec4(255, 255, 255, 255), ang(0.0000, 90.0000, 90.0000), "models/sprops/misc/alphanum/alphanum_4.mdl", "models/debug/debugwhite", 0)
+    #[ MPH_140 ]#
+        Holos[29, array] = array(vec(0.9406, -5.4263, 0.3200), vec(0.0300, 0.0250, 0.0323), vec4(255, 255, 255, 255), ang(0.0000, 90.0000, 90.0000), "models/sprops/misc/alphanum/alphanum_0.mdl", "models/debug/debugwhite", 0)
+    #[ MPH_160 ]#
+        Holos[30, array] = array(vec(-0.0139, -5, 0.3200), vec(0.0300, 0.0250, 0.0323), vec4(255, 255, 255, 255), ang(0.0000, 90.0000, 90.0000), "models/sprops/misc/alphanum/alphanum_1.mdl", "models/debug/debugwhite", 0)
+    #[ MPH_160 ]#
+        Holos[31, array] = array(vec(-0.0139, -5.3764, 0.3200), vec(0.0300, 0.0250, 0.0323), vec4(255, 255, 255, 255), ang(0.0000, 90.0000, 90.0000), "models/sprops/misc/alphanum/alphanum_6.mdl", "models/debug/debugwhite", 0)
+    #[ MPH_160 ]#
+        Holos[32, array] = array(vec(-0.0139, -5.7197, 0.3200), vec(0.0300, 0.0250, 0.0323), vec4(255, 255, 255, 255), ang(0.0000, 90.0000, 90.0000), "models/sprops/misc/alphanum/alphanum_0.mdl", "models/debug/debugwhite", 0)
+        
+#[ RPM Guage ]#
+    #[ RPM_x1000 ]#
+        Holos[33, array] = array(vec(0.6860, 4.2885, 0.3200), vec(0.0300, 0.0250, 0.0230), vec4(255, 255, 255, 255), ang(0.0000, 90.0000, 90.0000), "models/sprops/misc/alphanum/alphanum_0.mdl", "models/debug/debugwhite", 0)
+    #[ RPM_x1000 ]#
+        Holos[34, array] = array(vec(0.6860, 3.6644, 0.3200), vec(0.0300, 0.0250, 0.0230), vec4(255, 255, 255, 255), ang(0.0000, 90.0000, 90.0000), "models/sprops/misc/alphanum/alphanum_R.mdl", "models/debug/debugwhite", 0)
+    #[ RPM_x1000 ]#
+        Holos[35, array] = array(vec(0.6860, 3.3584, 0.3200), vec(0.0300, 0.0250, 0.0230), vec4(255, 255, 255, 255), ang(0.0000, 90.0000, 90.0000), "models/sprops/misc/alphanum/alphanum_P.mdl", "models/debug/debugwhite", 0)
+    #[ RPM_x1000 ]#
+        Holos[36, array] = array(vec(0.6864, 4.8323, 0.3200), vec(0.0300, 0.0250, 0.0230), vec4(255, 255, 255, 255), ang(0.0000, 90.0000, 90.0000), "models/sprops/misc/alphanum/alphanum_1.mdl", "models/debug/debugwhite", 0)
+    #[ RPM_x1000 ]#
+        Holos[37, array] = array(vec(0.6798, 5.1115, 0.3200), vec(0.0209, 0.0250, 0.0166), vec4(255, 255, 255, 255), ang(0.0000, 90.0000, 90.0000), "models/sprops/misc/alphanum/alphanum_x.mdl", "models/debug/debugwhite", 0)
+    #[ RPM_x1000 ]#
+        Holos[38, array] = array(vec(0.6860, 3.0155, 0.3200), vec(0.0300, 0.0250, 0.0230), vec4(255, 255, 255, 255), ang(0.0000, 90.0000, 90.0000), "models/sprops/misc/alphanum/alphanum_M.mdl", "models/debug/debugwhite", 0)
+    #[ RPM_x1000 ]#
+        Holos[39, array] = array(vec(0.6860, 4.0000, 0.3200), vec(0.0300, 0.0250, 0.0230), vec4(255, 255, 255, 255), ang(0.0000, 90.0000, 90.0000), "models/sprops/misc/alphanum/alphanum_0.mdl", "models/debug/debugwhite", 0)
+    #[ RPM_x1000 ]#
+        Holos[40, array] = array(vec(0.6860, 4.5753, 0.3200), vec(0.0300, 0.0250, 0.0230), vec4(255, 255, 255, 255), ang(0.0000, 90.0000, 90.0000), "models/sprops/misc/alphanum/alphanum_0.mdl", "models/debug/debugwhite", 0)
+
+    #[ RPM_Min_Tick ]#
+        Holos[41, array] = array(vec(0.0000, 4.0000, 0.3500), vec(0.4500, 0.0100, 0.0100), vec4(255, 255, 255, 255), ang(0.0000, 0.0000, 0.0000), "plane", "", 0)
+            Clips["41_1", array] = array(vec(-2.0141, 4.0000, 0.3500), vec(-1.0000, 0.0000, -0.0000))
+    #[ RPM_1K_Tick ]#
+        Holos[42, array] = array(vec(0.0000, 4.0000, 0.3500), vec(0.4500, 0.0100, 0.0100), vec4(255, 255, 255, 255), ang(0.0000, -33.7500, 0.0000), "plane", "", 0)
+            Clips["42_1", array] = array(vec(-1.6746, 5.1190, 0.3500), vec(-0.8315, 0.5556, -0.0000))
+    #[ RPM_2K_Tick ]#
+        Holos[43, array] = array(vec(0.0000, 4.0000, 0.3500), vec(0.4500, 0.0100, 0.0100), vec4(255, 255, 255, 255), ang(0.0000, -67.5000, 0.0000), "plane", "", 0)
+            Clips["43_1", array] = array(vec(-0.7707, 5.8608, 0.3500), vec(-0.3827, 0.9239, -0.0000))
+    #[ RPM_3K_Tick ]#
+        Holos[44, array] = array(vec(0.0000, 4.0000, 0.3500), vec(0.4500, 0.0100, 0.0100), vec4(255, 255, 255, 255), ang(0.0000, -101.2500, 0.0000), "plane", "", 0)
+            Clips["44_1", array] = array(vec(0.3929, 5.9754, 0.3500), vec(0.1951, 0.9808, -0.0000))
+    #[ RPM_4K_Tick ]#
+        Holos[45, array] = array(vec(0.0000, 4.0000, 0.3500), vec(0.4500, 0.0100, 0.0100), vec4(255, 255, 255, 255), ang(0.0000, -135.0000, 0.0000), "plane", "", 0)
+            Clips["45_1", array] = array(vec(1.4242, 5.4242, 0.3500), vec(0.7071, 0.7071, -0.0000))
+    #[ RPM_5K_Tick ]#
+        Holos[46, array] = array(vec(0.0000, 4.0000, 0.3500), vec(0.4500, 0.0100, 0.0100), vec4(255, 255, 255, 255), ang(0.0000, -168.7500, 0.0000), "plane", "", 0)
+            Clips["46_1", array] = array(vec(1.9754, 4.3929, 0.3500), vec(0.9808, 0.1951, -0.0000))
+    #[ RPM_6K_Tick ]#
+        Holos[47, array] = array(vec(0.0000, 4.0000, 0.3500), vec(0.4500, 0.0100, 0.0100), vec4(255, 255, 255, 255), ang(0.0000, -202.5000, 0.0000), "plane", "", 0)
+            Clips["47_1", array] = array(vec(1.8608, 3.2293, 0.3500), vec(0.9239, -0.3827, -0.0000))
+    #[ RPM_7K_Tick ]#
+        Holos[48, array] = array(vec(0.0000, 4.0000, 0.3500), vec(0.4500, 0.0100, 0.0100), vec4(255, 255, 255, 255), ang(0.0000, -236.2500, 0.0000), "plane", "", 0)
+            Clips["48_1", array] = array(vec(1.1190, 2.3254, 0.3500), vec(0.5556, -0.8315, -0.0000))
+    #[ RPM_Max_Tick ]#
+        Holos[49, array] = array(vec(0.0000, 4.0000, 0.3500), vec(0.4500, 0.0100, 0.0100), vec4(255, 255, 255, 255), ang(0.0000, 90.0000, 0.0000), "plane", "", 0)
+            Clips["49_1", array] = array(vec(0.0000, 1.9859, 0.3500), vec(0.0000, -1.0000, -0.0000))
+
+    #[ RPM_0 ]#
+        Holos[50, array] = array(vec(-1.6450, 4.0000, 0.3200), vec(0.0300, 0.0250, 0.0323), vec4(255, 255, 255, 255), ang(0.0000, 90.0000, 90.0000), "models/sprops/misc/alphanum/alphanum_0.mdl", "models/debug/debugwhite", 0)
+    #[ RPM_1 ]#
+        Holos[51, array] = array(vec(-1.3282, 4.9791, 0.3200), vec(0.0300, 0.0250, 0.0323), vec4(255, 255, 255, 255), ang(0.0000, 90.0000, 90.0000), "models/sprops/misc/alphanum/alphanum_1.mdl", "models/debug/debugwhite", 0)
+    #[ RPM_2 ]#
+        Holos[52, array] = array(vec(-0.6362, 5.5515, 0.3200), vec(0.0300, 0.0250, 0.0323), vec4(255, 255, 255, 255), ang(0.0000, 90.0000, 90.0000), "models/sprops/misc/alphanum/alphanum_2.mdl", "models/debug/debugwhite", 0)
+    #[ RPM_3 ]#
+        Holos[53, array] = array(vec(0.3517, 5.7022, 0.3200), vec(0.0300, 0.0250, 0.0323), vec4(255, 255, 255, 255), ang(0.0000, 90.0000, 90.0000), "models/sprops/misc/alphanum/alphanum_3.mdl", "models/debug/debugwhite", 0)
+    #[ RPM_4 ]#
+        Holos[54, array] = array(vec(1.1871, 5.2656, 0.3200), vec(0.0300, 0.0250, 0.0323), vec4(255, 255, 255, 255), ang(0.0000, 90.0000, 90.0000), "models/sprops/misc/alphanum/alphanum_4.mdl", "models/debug/debugwhite", 0)
+    #[ RPM_7 ]#
+        Holos[55, array] = array(vec(0.9406, 2.5385, 0.3200), vec(0.0300, 0.0250, 0.0323), vec4(255, 255, 255, 255), ang(0.0000, 90.0000, 90.0000), "models/sprops/misc/alphanum/alphanum_7.mdl", "models/debug/debugwhite", 0)
+    #[ RPM_8 ]#
+        Holos[56, array] = array(vec(-0.0139, 2.2050, 0.3200), vec(0.0300, 0.0250, 0.0323), vec4(255, 255, 255, 255), ang(0.0000, 90.0000, 90.0000), "models/sprops/misc/alphanum/alphanum_8.mdl", "models/debug/debugwhite", 0)
+    #[ RPM_5 ]#
+        Holos[57, array] = array(vec(1.6299, 4.2844, 0.3200), vec(0.0300, 0.0250, 0.0323), vec4(255, 255, 255, 255), ang(0.0000, 90.0000, 90.0000), "models/sprops/misc/alphanum/alphanum_5.mdl", "models/debug/debugwhite", 0)
+    #[ RPM_6 ]#
+        Holos[58, array] = array(vec(1.5154, 3.2406, 0.3200), vec(0.0300, 0.0250, 0.0323), vec4(255, 255, 255, 255), ang(0.0000, 90.0000, 90.0000), "models/sprops/misc/alphanum/alphanum_6.mdl", "models/debug/debugwhite", 0)
+
+#[Decor]#
+    #[ MPH__Rim ]#
+        Holos[59, array] = array(vec(0.0000, -4.0000, 0.2000), vec(0.5000, 0.5000, 0.1500), vec4(255, 255, 255, 255), ang(0.0000, 0.0000, 0.0000), "hq_tube_thin", "sprops/sprops_metal1", 0)
+    #[ MPH_Backing ]#
+        Holos[60, array] = array(vec(0.0000, -4.0000, 0.0000), vec(0.4800, 0.4800, 0.0500), vec4(30, 30, 30, 255), ang(0.0000, 0.0000, 0.0000), "hq_cylinder", "", 0)
+
+    #[ MID_Backing ]#
+        Holos[61, array] = array(vec(2.0000, 0.0000, 0.0000), vec(0.2400, 0.2400, 0.0500), vec4(30, 30, 30, 255), ang(0.0000, 0.0000, 0.0000), "hq_cylinder", "", 0)
+    #[ MID__Rim ]#
+        Holos[62, array] = array(vec(2.0000, 0.0000, 0.2000), vec(0.2600, 0.2600, 0.1500), vec4(255, 255, 255, 255), ang(0.0000, 0.0000, 0.0000), "hq_tube_thin", "sprops/sprops_metal1", 0)
+
+    #[ RPM_RedLine ]#
+        Holos[63, array] = array(vec(0.0000, 4.0000, 0.2000), vec(0.4200, 0.4200, 0.0200), vec4(255, 0, 0, 255), ang(0.0000, 0.0000, 0.0000), "hq_tube_thin", "models/combine_scanner/scanner_eye", 0)
+            Clips["63_1", array] = array(vec(0.0322, 1.8494, 0.2000), vec(0.1463, -0.9892, -0.0000))
+    #[ RPM_Rim ]#
+        Holos[64, array] = array(vec(0.0000, 4.0000, 0.2000), vec(0.5000, 0.5000, 0.1500), vec4(255, 255, 255, 255), ang(0.0000, 0.0000, 0.0000), "hq_tube_thin", "sprops/sprops_metal1", 0)
+    #[ RPM_Backing ]#
+        Holos[65, array] = array(vec(0.0000, 4.0000, 0.0000), vec(0.4800, 0.4800, 0.0500), vec4(30, 30, 30, 255), ang(0.0000, 0.0000, 0.0000), "hq_cylinder", "", 0)    
+        
+#[ Gear Indicator ]#
+    #[ LED_A ]#    Holos[66, array] = array(vec(-0.5000, 0.3500, 0.5000), vec(0.0500, 0.0100, 1.0000), vec4(255, 0, 199, 255), ang(-0.0000, -0.0000, 0.0000), "plane", "", 0)
+    #[ LED_B ]#    Holos[67, array] = array(vec(-0.1100, 0.0000, 0.5000), vec(0.0100, 0.0500, 1.0000), vec4(255, 0, 199, 255), ang(-0.0000, -0.0000, 0.0000), "plane", "", 0)
+    #[ LED_C ]#    Holos[68, array] = array(vec(-0.5000, -0.350, 0.5000), vec(0.0500, 0.0100, 1.0000), vec4(255, 0, 199, 255), ang(-0.0000, -0.0000, 0.0000), "plane", "", 0)
+    #[ LED_D ]#    Holos[69, array] = array(vec(-1.3000, -0.350, 0.5000), vec(0.0500, 0.0100, 1.0000), vec4(255, 0, 199, 255), ang(-0.0000, -0.0000, 0.0000), "plane", "", 0)
+    #[ LED_E ]#    Holos[70, array] = array(vec(-1.7000, 0.0000, 0.5000), vec(0.0100, 0.0500, 1.0000), vec4(255, 0, 199, 255), ang(-0.0000, -0.0000, 0.0000), "plane", "", 0)
+    #[ LED_F ]#    Holos[71, array] = array(vec(-1.3000, 0.3500, 0.5000), vec(0.0500, 0.0100, 1.0000), vec4(255, 0, 199, 255), ang(-0.0000, -0.0000, 0.0000), "plane", "", 0)
+    #[ LED_G ]#    Holos[72, array] = array(vec(-0.9000, 0.0000, 0.5000), vec(0.0100, 0.0500, 1.0000), vec4(255, 0, 199, 255), ang(-0.0000, -0.0000, 0.0000), "plane", "", 0)
+    #[ LED_R ]#    Holos[73, array] = array(vec(-1.300, -0.00, 0.5000), vec(0.0100, 0.0500, 1.0000), vec4(255, 0, 199, 255), ang(-0.0000, -45.0000, 0.0000), "plane", "", 0)
+    #[Backing]#    Holos[74, array] = array(vec(-0.9000, -0.350, 0.1000), vec(0.3,0.5,0.4), vec4(0, 0, 0, 255), ang(-0.0000, -0.0000, 0.0000), "plane", "", 0)
+    ##########
+    
+    TotalHolos = Holos:count()
+    #if (1 > holoClipsAvailable()) {error("A holo has too many clips to spawn on this server! (Max is " + holoClipsAvailable() + ")")}
+}
+
+
+#You may place code here if it doesn't require all of the holograms to be spawned.
+
+
+if (HolosSpawned)
+{
+B = vec4(20,20,20,255)
+O = vec(255,0,0)
+W = vec(255,255,255)
+R = vec4(240,0,0,255)
+
+    #Your code goes here if it needs all of the holograms to be spawned!
+    holoAng(1,E:toWorld(ang(0,MPH_Ang,0)))  # and put your RPM code on this using the 6th Index as we see up on the array
+    holoAng(2,E:toWorld(ang(0,RPM_Ang,0)))  # and put your RPM code on this using the 6th Index as we see up on the array
+
+if(Lights) {Color = O}
+    else {Color = W}
+if(changed(Color)&Color){    
+     for (I=1,58){
+          holoColor(I,Color)
+     }
+}
+
+
+  #-------------Gear Indicator-------------
+
+if (Gear == 3)
+     {  holoColor(66,R)
+        holoColor(67,B)
+        holoColor(68,B)
+        holoColor(69,B)
+        holoColor(70,B)
+        holoColor(71,R)
+        holoColor(72,B)
+        holoColor(73,B) }
+
+if (Gear == 4)
+     {  holoColor(66,B)
+        holoColor(67,R)
+        holoColor(68,R)
+        holoColor(69,B)
+        holoColor(70,R)
+        holoColor(71,R)
+        holoColor(72,R)
+        holoColor(73,B) }
+        
+if (Gear == 5)
+     {  holoColor(66,B)
+        holoColor(67,R)
+        holoColor(68,R)
+        holoColor(69,R)
+        holoColor(70,R)
+        holoColor(71,B)
+        holoColor(72,R)
+        holoColor(73,B) }
+
+if (Gear == 6)
+     {  holoColor(66,R)
+        holoColor(67,B)
+        holoColor(68,R)
+        holoColor(69,R)
+        holoColor(70,B)
+        holoColor(71,B)
+        holoColor(72,R)
+        holoColor(73,B) }
+
+if (Gear == 7)
+     {  holoColor(66,R)
+        holoColor(67,R)
+        holoColor(68,B)
+        holoColor(69,R)
+        holoColor(70,R)
+        holoColor(71,B)
+        holoColor(72,R)
+        holoColor(73,B) }
+        
+if (Gear == 8)
+     {  holoColor(66,R)
+        holoColor(67,R)
+        holoColor(68,B)
+        holoColor(69,R)
+        holoColor(70,R)
+        holoColor(71,R)
+        holoColor(72,R)
+        holoColor(73,B) }
+        
+if (Gear == 1)
+     {  holoColor(66,R)
+        holoColor(67,R)
+        holoColor(68,R)
+        holoColor(69,B)
+        holoColor(70,B)
+        holoColor(71,R)
+        holoColor(72,R)
+        holoColor(73,R) }
+        
+if (Gear == 2)
+     {  holoColor(66,B)
+        holoColor(67,B)
+        holoColor(68,B)
+        holoColor(69,R)
+        holoColor(70,B)
+        holoColor(71,R)
+        holoColor(72,B)
+        holoColor(73,R) }
+
+}
+else
+{
+    while (LastHolo <= Holos:count() & holoCanCreate() & perf())
+    {
+        local Ar = Holos[LastHolo, array]
+        addHolo(Ar[1, vector], Ar[2, vector], Ar[3, vector4], Ar[4, angle], Ar[5, string], Ar[6, string], Ar[7, number])
+        LastHolo++
+    }
+    
+    if (LastHolo > Holos:count())
+    {
+        Holos:clear()
+        Clips:clear()
+        HolosSpawned = 1
+        E:setAlpha(0)
+    }
+
+    interval(1000)
+}
+
+
+if(last()){
+    holoParent(1,E)
+    holoParent(2,E)
+}

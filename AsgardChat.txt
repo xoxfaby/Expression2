@@ -1,0 +1,96 @@
+@name 
+@inputs ASG:wirelink Drones:wirelink Shield:wirelink Ring:wirelink
+@outputs 
+@persist Target:entity Send Send2
+@trigger 
+
+runOnChat(1)
+
+if(Target){
+Drones["X",normal] = Target:pos():x()
+Drones["Y",normal] = Target:pos():y()
+Drones["Z",normal] = Target:pos():z()
+}
+
+ASG["Send",normal] = 0
+Drones["Launch",normal] = 0
+Drones["Lock",normal] = 1
+
+Ring["Dial Closest",number] = 0
+Ring["Dial Address",string] = ""
+
+function teleport(Origin:vector,Targ:vector,Pl:normal)
+{
+    ASG["Origin",vector] = Origin
+    ASG["Dest",vector] = Targ
+    ASG["Teleport Everything",normal] = Pl   
+    Send = 1
+    
+}
+if(chatClk(owner())){
+    
+    if(lastSaid():sub(1,5) == "bring")
+    {
+    TargPl = findPlayerByName( lastSaid():sub(7) )
+    teleport(TargPl:pos(),owner():aimPos(),0)
+    
+    }
+    elseif(lastSaid():sub(1,4) == "goto")
+    {     
+        if(lastSaid():sub(6) == "base")
+        {
+            TargPl = entity()
+            teleport(owner():pos(),TargPl:pos(),0)
+            
+        }else{
+            TargPl = findPlayerByName( lastSaid():sub(6) )
+            teleport(owner():pos(),TargPl:pos()+vec(0,0,100),0)
+            
+        }
+    }
+    elseif(lastSaid():sub(1,5) == "steal")
+    {
+        TargPl = entity()
+        teleport(owner():aimPos(),TargPl:pos(),1)
+        interval(100)
+    } elseif(lastSaid():sub(1,6) == "target")
+    {
+        Target = findPlayerByName( lastSaid():sub(8) )
+        print("Locked onto " + Target:name())
+    } elseif(lastSaid():sub(1,4) == "fire")
+    {
+        Drones["Launch",normal] = 1
+        Drones["Lock",normal] = 0
+    }
+    elseif(lastSaid():sub(1,6) == "shield")
+    {
+        if(lastSaid():sub(8) == "on")
+        {            
+            Shield["Activate",normal] = 1
+        }elseif(lastSaid():sub(8) == "off")
+        {
+            Shield["Activate",normal] = 0
+        }
+    }
+    elseif(lastSaid() == "rings")
+    {
+        Ring["Dial Closest",number] = 1
+    }
+    elseif(lastSaid():sub(1,5) == "rings")
+    {
+        Ring["Dial Address",string] = lastSaid():sub(7)
+    }
+}
+
+if(Send2)
+{
+    ASG["Send",number] = 1
+    Send2 = 0
+}
+
+if(Send)
+{
+    Send2 = 1
+    Send = 0   
+}
+            interval(1000)

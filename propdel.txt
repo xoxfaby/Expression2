@@ -1,0 +1,50 @@
+@name E2 Cleaner
+@inputs
+@outputs 
+@persist Watch:array NR
+@trigger 
+if(first())
+{
+fileLoad(">e2shared/RE2.txt")   
+runOnFile(1)
+} else {
+if(fileClk())
+{
+runOnFile(0)
+NR = fileRead():toNumber()   
+}
+findByClass("gmod_wire_expression2")
+A = findToArray()
+C = 0
+Names = table()
+if(A:count() > 20){
+foreach(K,V:entity=Watch)
+{
+    if(V:getName() == "" && V:getColor() == vec(255,0,0) )    {
+        C++
+        V:propDelete()
+        Names[V:owner():name(),number] = 1
+    } else {
+        Watch:remove(K)  
+    }
+}
+foreach(K,V:entity=A)
+{
+    if(V:getName() == "" && V:getColor() == vec(255,0,0) )    {    
+        Watch[Watch:count() +1,entity] = V 
+    }
+}
+NS = ""
+foreach(K,V:number=Names)
+{
+    NS = NS + K + ", "  
+}
+if (C > 0){
+    concmd("say Deleted " + C + " spam E2's spawned by " + NS )
+    NR += C
+}
+}
+fileWrite(">e2shared/RE2.txt", NR:toString())
+interval(20000)
+
+}

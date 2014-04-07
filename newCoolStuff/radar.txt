@@ -1,0 +1,80 @@
+@name Radar 
+@inputs 
+@outputs 
+@persist E:entity ANG Players:array
+@trigger 
+
+runOnTick(1)
+
+if(first())
+{
+    E = entity()
+    
+    holoCreate(0,E:pos() + vec(0,0,10),vec(20,20,0.5),ang(0,0,0),vec(0,0,0))
+    holoModel(0,"hq_rcylinder_thin")
+    holoParent(0,E)
+    
+    holoCreate(-1,E:pos() + vec(0,0,10.1),vec(0.1,20,0.5),ang(0,0,0),vec(0,0,0))
+    holoModel(-1,"cube")
+    holoParent(-1,0)
+    holoColor(-1,vec(80,255,80))
+    holoCreate(-2,E:pos() + vec(0,0,10.1),vec(20,0.1,0.5),ang(0,0,0),vec(0,0,0))
+    holoModel(-2,"cube")
+    holoParent(-2,0)
+    holoColor(-2,vec(80,255,80))
+    
+    holoCreate(-4,E:pos() + vec(0,0,10.2),vec(0.1,0.1,0.1),ang(0,0,0),vec(0,0,0))
+    
+    holoParent(-4,0)
+    holoColor(-4,vec(80,80,80), 0)
+    
+    holoCreate(-3,E:pos() + vec(60,0,10.2),vec(10,0.1,0.5),ang(0,0,0),vec(0,0,0))
+    holoModel(-3,"cube")
+    holoParent(-3,-4)
+    holoColor(-3,vec(255,255,255))
+    
+}
+
+if(findCanQuery()){
+findByClass("player")
+Players = findToArray()
+}
+
+MAX = 0
+foreach(I,V:entity=Players)
+{
+if(E:pos():setZ(0):distance(V:pos():setZ(0)) > MAX  )
+{
+MAX = E:pos():setZ(0):distance(V:pos():setZ(0)  ) 
+} 
+}
+foreach(I,V:entity=Players)
+{
+
+Plus = (( V:pos():setZ(0) - E:pos():setZ(0)):normalized() * E:pos():setZ(0):distance(V:pos():setZ(0))) / MAX * 100
+ANGD = Plus:toAngle():yaw()
+if(ANG < ANGD + 1  && ANG >  (ANGD - 1) || 1  ){
+if(holoEntity(I))
+{
+    holoPos(I,holoEntity(0):pos() + Plus + vec(0,0,3))
+}
+else
+{
+
+    holoCreate(I,holoEntity(0):pos() + Plus  + vec(0,0,3))
+    holoModel(I,"hq_sphere")
+    holoColor(I,vec(255,255,255))
+    holoScale(I,vec(0.2,0.2,0.2))
+}
+
+
+}
+}
+
+ANG++
+ANG++
+ANG++
+ANG++
+if(ANG > 360){ANG = 0,soundPlay(1,0.8,"npc/strider/strider_hunt2.wav")}
+holoAng(-4,ang(0,ANG,0))
+

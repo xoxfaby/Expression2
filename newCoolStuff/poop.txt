@@ -1,0 +1,34 @@
+@name ESP
+@inputs 
+@outputs 
+@persist Players:array
+@trigger 
+
+if(findCanQuery()){
+findByClass("player")
+Players = findToArray()
+}
+
+foreach(I,V:entity=Players)
+{
+    if(V != owner())
+    {
+        RD = rangerOffset(100000,owner():shootPos(), V:pos() - owner():pos() )
+        if(RD:entity() != owner() && RD:entity() != V)
+        {
+            POS = owner():shootPos() + (RD:position() - owner():shootPos()):normalized() * 100
+            if(!holoEntity(I))
+            {
+            holoCreate(I,POS)
+            holoModel(I,"hq_sphere")
+            }
+            else
+            {
+            holoPos(I,POS)   
+            }
+        }
+    }  
+}
+
+
+interval(100)

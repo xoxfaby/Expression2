@@ -1,0 +1,32 @@
+@name 
+@inputs 
+@outputs 
+@persist E:entity X
+@trigger 
+
+function holoNumber(ID,Number){
+Numbers = array()
+Numbers[0,string] = "models/sprops/misc/alphanum/alphanum_0.mdl"
+Numbers[1,string] = "models/sprops/misc/alphanum/alphanum_1.mdl"
+Numbers[2,string] = "models/sprops/misc/alphanum/alphanum_2.mdl"
+Numbers[3,string] = "models/sprops/misc/alphanum/alphanum_3.mdl"
+Numbers[4,string] = "models/sprops/misc/alphanum/alphanum_4.mdl"
+Numbers[5,string] = "models/sprops/misc/alphanum/alphanum_5.mdl"
+Numbers[6,string] = "models/sprops/misc/alphanum/alphanum_6.mdl"
+Numbers[7,string] = "models/sprops/misc/alphanum/alphanum_7.mdl"
+Numbers[8,string] = "models/sprops/misc/alphanum/alphanum_8.mdl"
+Numbers[9,string] = "models/sprops/misc/alphanum/alphanum_9.mdl"
+
+holoCreate(ID)
+holoModel(ID, Numbers[Number,string])
+holoAng(ID,ang(0,0,0))
+}
+MAX = 8
+
+for(I = 0, MAX)
+{
+holoNumber(I,I)   
+holoPos(I,entity():pos() + vec( cos( (( I / MAX ) * 270) - 90 ) * 50 ,0, sin( (( I / MAX ) * 270) - 90 ) * 50 ) )
+    
+    
+}

@@ -1,0 +1,12 @@
+@name Trampoline
+@inputs 
+@outputs 
+@persist 
+@trigger 
+
+
+runOnTick(1)
+
+if(owner():pos():distance(entity():pos())<150){
+owner():health(100)
+}

@@ -1,0 +1,35 @@
+@name History
+@inputs 
+@outputs 
+@persist Props:array PL:entity  I
+@trigger 
+
+if(first()){
+    I = 0
+findByClass("prop_physics")
+AProps = findToArray()   
+PL = findPlayerByName("XoXFaby") 
+
+foreach(K,V:entity=AProps){
+if(V:owner() == PL)
+{
+   Props[Props:count()+1, entity] = V 
+}
+}
+    
+}
+else{
+    
+foreach(K,V:entity=Props){
+I++
+holoCreate(I) 
+holoModel(I,V:model())
+holoPos(I,V:pos())
+holoAng(I,V:angles())
+
+}
+
+}
+
+
+interval(50)

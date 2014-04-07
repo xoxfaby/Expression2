@@ -1,0 +1,17 @@
+@name 
+@inputs 
+@outputs 
+@persist 
+@trigger 
+
+runOnTick(1)
+
+if(findCanQuery()){
+findInSphere(entity():pos(), 500)
+
+A = findToArray()
+foreach(K,V:entity=A)
+{
+print(K,V)   
+}
+}

@@ -1,0 +1,15 @@
+@name PlaneBase
+@inputs W A S Derw
+@outputs
+@persist E:entity
+@trigger
+@model models/sprops/rectangles/size_3/rect_24x24x3.mdl
+
+runOnTick(1)
+
+if(first())
+{
+    E = entity()
+}
+
+E:setAng(owner():aimNormal():toAngle())

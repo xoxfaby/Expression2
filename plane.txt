@@ -1,0 +1,12 @@
+@name 
+@inputs Pod:wirelink Base:entity
+@outputs 
+@persist 
+@trigger 
+
+rangerFilter(Base)
+rangerFilter(Base:getConstraints())
+RD = rangerOffset(1000,Base:pos(), vec(0,0,-1))
+Base:applyForce((( RD:position() +  vec(0,0,100)) - Base:pos()) * Base:mass())
+
+interval(100)

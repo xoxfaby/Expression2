@@ -1,0 +1,27 @@
+@name HERE YOU FUCKING DUMBASS
+@inputs Ent:entity Offset:angle
+@outputs 
+@persist 
+@trigger 
+Ent = entity()
+
+if(first())
+{
+    holoCreate(1,entity():pos(),vec(0.3,0.3,0.3),ang(0,0,0),vec(255,0,0))  
+    holoModel(1,"hq_sphere") 
+}
+
+RD = rangerOffset(10000,Ent:pos() + ((Ent:angles() + Offset):forward()):normalized() * Ent:boxMax():length(),(Ent:angles() + Offset):forward())
+holoPos(1,owner():aimPos())
+
+
+
+
+
+
+
+
+
+
+interval(50)
+

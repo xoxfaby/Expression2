@@ -1,0 +1,73 @@
+@name BezierTest
+@inputs 
+@outputs 
+@persist Vec1:vector Vec2:vector E:entity T U
+@trigger 
+
+if(first())
+{
+    E = entity()
+    Vec1 = E:pos() + vec(100,1000,0)   
+    Vec2 = E:pos() + vec(-100,0,0)
+    
+    holoCreate(1,Vec1)
+    holoCreate(2,Vec2)
+    holoColor(1,vec(255,0,0))
+    holoColor(2,vec(255,0,0))
+    
+    
+    
+    holoCreate(3)
+    holoColor(3,vec(0,255,0))
+    
+    holoCreate(4)
+    holoColor(4,vec(0,200,0))
+    
+    holoCreate(5)
+    holoColor(5,vec(0,100,0))
+
+
+    holoCreate(6)
+    holoColor(6,vec(100,100,100))
+    function vector2 bezier(Points:array,T)
+    {
+        while(Points:count() > 1){
+            NewPoints = array()
+            foreach(K,V:vector2=Points)
+            {
+                if(K<Points:count()){
+                NewPoints[NewPoints:count() + 1,vector2] = V + T * ( Points[K + 1,vector2] - V )
+                }
+            } 
+            Points = NewPoints:clone()  
+        }
+        return Points[1,vector2]   
+    }
+}
+if(U){
+T = T + 0.05
+}
+else
+{
+T = T - 0.05 
+}
+if(T >= 1){
+U = 0   
+}elseif(T <= 0){
+U = 1
+}
+
+Points = array( vec2(0,0), vec2(-15,20),vec2(100,90),vec2(80,120), vec2(120,0))
+Bez =  bezier(Points,T)
+Vec3 = mix(Vec1,Vec2,Bez:x()/120)
+Vec3 += vec(0,0,Bez:y())
+
+holoPos(3,Vec3)
+
+
+
+
+
+
+
+interval(50)

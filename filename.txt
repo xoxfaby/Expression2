@@ -1,0 +1,12 @@
+@name 
+@inputs 
+@outputs 
+@persist 
+@trigger 
+
+runOnFile(1)
+print(1)
+
+fileLoad("garrysmod/data/Expression2/e2shared/RE2.txt")
+
+fileWrite(">e2shared/RE2.txt","TEST")

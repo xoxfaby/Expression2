@@ -1,0 +1,182 @@
+@name Trig2
+@inputs  
+@outputs 
+@persist Step A B E:entity Vec1:vector Vec2:vector Vec3:vector Vec4:vector  Vec1Old:vector Vec2Old:vector Vec3Old:vector Vec4Old:vector Sched1 Sched2 Sched3 Sched4 Active Vec1New:vector Vec2New:vector Vec3New:vector Vec4New:vector 
+@trigger 
+@model models/sprops/cuboids/height12/size_1/cube_12x12x12.mdl
+
+if(!entity():isPlayerHolding()){
+entity():propFreeze(1)
+}
+
+
+
+#65 
+if(E:pos():distance(Vec1) > 65){ Sched1 = 1 }
+if(E:pos():distance(Vec2) > 65){ Sched2 = 1 }
+if(E:pos():distance(Vec3) > 65){ Sched3 = 1 }
+if(E:pos():distance(Vec4) > 65){ Sched4 = 1  }
+
+if(Active == 0)
+{
+    if(Sched1){Active = 1}
+    elseif(Sched2){Active = 2}
+    elseif(Sched3){Active = 3}
+    elseif(Sched4){Active = 4}
+}
+
+RD = rangerAngle(-90,0,0)
+GDist = RD:distance()
+if(first())
+{
+    A = 40
+    B = 50
+    E = entity()
+    
+    Vec1 = E:pos() + vec(25,25,0 - GDist)
+    Vec2 = E:pos() + vec(25,-25,0 - GDist)
+    Vec3 = E:pos() + vec(-25,25,0 - GDist)
+    Vec4 = E:pos() + vec(-25,-25,0 - GDist)
+    
+    holoCreate(1)
+    holoParent(1,E)
+    
+    holoCreate(2,E:pos() + vec(A,0,0))
+    holoParent(2,1)
+    
+    holoCreate(3,holoEntity(2):pos() + vec(B,0,0))
+    holoParent(3,2) 
+    
+    holoCreate(4)
+    holoParent(4,E)
+    
+    holoCreate(5,E:pos() + vec(A,0,0))
+    holoParent(5,4)
+    
+    holoCreate(6,holoEntity(2):pos() + vec(B,0,0))
+    holoParent(6,5) 
+    
+    holoCreate(7)
+    holoParent(7,E)
+    
+    holoCreate(8,E:pos() + vec(A,0,0))
+    holoParent(8,7)
+    
+    holoCreate(9,holoEntity(2):pos() + vec(B,0,0))
+    holoParent(9,8) 
+    
+    holoCreate(10)
+    holoParent(10,E)
+    
+    
+    holoCreate(11,E:pos() + vec(A,0,0))
+    holoParent(11,10)
+    
+    holoCreate(12,holoEntity(2):pos() + vec(B,0,0))
+    holoParent(12,11)  
+    
+    holoCreate(13,E:pos() + vec(A / 2,0,0))
+    holoParent(13,1)
+    holoScale(13,vec(A/12,0.1,0.1))
+    
+    holoCreate(14,E:pos() + vec(A / 2,0,0))
+    holoParent(14,4)
+    holoScale(14,vec(A/12,0.1,0.1))
+    
+    holoCreate(15,E:pos() + vec(A / 2,0,0))
+    holoParent(15,7)
+    holoScale(15,vec(A/12,0.1,0.1))
+    
+    holoCreate(16,E:pos() + vec(A / 2,0,0))
+    holoParent(16,10)
+    holoScale(16,vec(A/12,0.1,0.1))
+    
+    holoCreate(17,holoEntity(2):pos() + vec(B / 2,0,0))
+    holoParent(17,2)
+    holoScale(17,vec(B/12,0.1,0.1))
+    
+    holoCreate(18,holoEntity(5):pos() + vec(B / 2,0,0))
+    holoParent(18,5)
+    holoScale(18,vec(B/12,0.1,0.1))
+    
+    holoCreate(19,holoEntity(8):pos() + vec(B / 2,0,0))
+    holoParent(19,8)
+    holoScale(19,vec(B/12,0.1,0.1))
+    
+    holoCreate(20,holoEntity(11):pos() + vec(B / 2,0,0))
+    holoParent(20,11)
+    holoScale(20,vec(B/12,0.1,0.1))
+    
+    for(I = 1,12)
+    {
+        holoAlpha(I,0)   
+    }
+}
+if(Active == 1)
+{
+    if(Step == 0){Vec1New = Vec1 + ((E:pos() - Vec1)* 0.75 ):setZ(0), Vec1Old = Vec1,Sched1 = 0}
+    if(Step == 10) { Vec1 = Vec1New, Step = -1, Active = 0 }
+    else
+    {
+         Vec1 = Vec1Old +  (( Vec1Old - Vec1New ) / 10) * Step
+    }
+    Step++
+}
+if(Active == 2)
+{
+    if(Step == 0){Vec2New = Vec2 + ((E:pos() - Vec2) * 0.75 ):setZ(0), Vec2Old = Vec2,Sched2 = 0}
+    if(Step == 10) { Vec2 = Vec2New, Step = -1, Active = 0 }
+    else
+    {
+         Vec2 = Vec2Old +  (( Vec2Old - Vec2New ) / 10) * Step
+    }
+    Step++
+}
+if(Active == 3)
+{
+    if(Step == 0){Vec3New = Vec3 + ((E:pos() - Vec3)* 0.75 ):setZ(0), Vec3Old = Vec3,Sched3 = 0}
+    if(Step == 10) { Vec3 = Vec3New, Step = -1, Active = 0 }
+    else
+    {
+         Vec3 = Vec3Old +  (( Vec3Old - Vec3New ) / 10) * Step
+    }
+    Step++
+}
+if(Active == 4)
+{
+    if(Step == 0){Vec4New = Vec4 + ((E:pos() - Vec4)* 0.75 ):setZ(0), Vec4Old = Vec4,Sched4 = 0}
+    if(Step == 10) { Vec4 = Vec4New, Step = -1, Active = 0 }
+    else
+    {
+         Vec4 = Vec4Old +  (( Vec4Old - Vec4New ) / 10) * Step
+    }
+    Step++
+}
+
+C1 = min(Vec1:distance(entity():pos()),A+B)
+C2 = min(Vec2:distance(entity():pos()),A+B)
+C3 = min(Vec3:distance(entity():pos()),A+B)
+C4 = min(Vec4:distance(entity():pos()),A+B)
+
+A11 = acos(((A^2) + (C1^2) - (B^2)) / ( 2*A*C1 ))
+A12 = acos(((A^2) + (B^2) - (C1^2)) / ( 2*A*B ))
+
+A21 = acos(((A^2) + (C2^2) - (B^2)) / ( 2*A*C2 ))
+A22 = acos(((A^2) + (B^2) - (C2^2)) / ( 2*A*B ))
+
+A31 = acos(((A^2) + (C3^2) - (B^2)) / ( 2*A*C3 ))
+A32 = acos(((A^2) + (B^2) - (C3^2)) / ( 2*A*B ))
+
+A41 = acos(((A^2) + (C4^2) - (B^2)) / ( 2*A*C4 ))
+A42 = acos(((A^2) + (B^2) - (C4^2)) / ( 2*A*B ))
+
+holoAng(1,(E:pos() - Vec1):toAngle() + ang(180 + A11,0,0))
+holoAng(2,holoEntity(1):toWorld(ang(180 + A12,0,0)))
+holoAng(4,(E:pos() - Vec2):toAngle() + ang(180 + A21,0,0))
+holoAng(5,holoEntity(4):toWorld(ang(180 + A22,0,0)))
+holoAng(7,(E:pos() - Vec3):toAngle() + ang(180 + A31,0,0))
+holoAng(8,holoEntity(7):toWorld(ang(180 + A32,0,0)))
+holoAng(10,(E:pos() - Vec4):toAngle() + ang(180 + A41,0,0))
+holoAng(11,holoEntity(10):toWorld(ang(180 + A42,0,0)))
+
+interval(100)

@@ -1,0 +1,101 @@
+@name FUCK
+@inputs 
+@outputs 
+@persist R MidHolo Letters:table PL:entity
+@trigger 
+
+#models/sprops/misc/alphanum/alphanum_a.mdl
+#models/sprops/misc/alphanum/alphanum_a.mdlq
+
+if(first())
+{
+    String = "Wishes he was Faby"
+   
+    Color = vec(255,0,170)
+    SubID = 3
+    
+    entity():propNotSolid(1)
+    
+    SS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+    for(I = 1, SS:length())
+    {
+        Letters[SS:sub(I,I),string] = SS:sub(I,I):lower()
+    }
+    SS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    for(I = 1, SS:length())
+    {
+        Letters[SS:sub(I,I):lower(),string] = "l_" + SS:sub(I,I):lower()
+    }
+    Letters["!",string] = "xmark"
+    Letters["@",string] = "atsign"
+    Letters["#",string] = "pdsign"
+    Letters["$",string] = "dlsign"
+    Letters["%",string] = "pcnt"
+    Letters["^",string] = "crt"
+    Letters["&",string] = "and"
+    Letters["*",string] = "ast"
+    Letters["(",string] = "lpar"
+    Letters[")",string] = "rpar"
+    Letters["_",string] = "underscore"
+    Letters["+",string] = "plu"
+    Letters["=",string] = "equal"
+    Letters[",",string] = "com"
+    Letters[".",string] = "prd"
+    Letters["/",string] = "div"
+    Letters["<",string] = "lessthan"
+    Letters[">",string] = "greaterthan"
+    Letters["?",string] = "qmark"
+    Letters["~",string] = "tilde"
+    Letters["[",string] = "lbracket"
+    Letters["]",string] = "rbracket"
+    Letters["'",string] = "apost"
+    Letters["|",string] = "bar"
+    Letters["{",string] = "lcbracket"
+    Letters["}",string] = "rcbracket"
+    Letters[";",string] = "scolon"
+    Letters[":",string] = "colon"
+    
+    MidHolo = floor((String:length() / 2))
+    
+    while(String:sub(MidHolo,MidHolo) == " " )
+    {
+        print(MidHolo)
+        print(String:sub(MidHolo,MidHolo))
+        MidHolo++   
+    }
+    for(I = 1, String:length())
+    {
+        if(String:sub(I,I):lower() != " " ){
+        holoCreate(I,vec(12*I,0,0))
+        holoAng(I,ang(0,180,0))
+        holoModel(I, "models/sprops/misc/alphanum/alphanum_" + Letters[String:sub(I,I),string]+ ".mdl" )
+        holoColor(I,Color)
+        holoBodygroup(I, 0, SubID)
+        holoDisableShading(I,0.9)
+
+        }
+    }
+    
+    PL = findPlayerByName("FingaFunga44")
+    for(I = 1, String:length())
+    {
+        if(I != MidHolo){
+            holoParent(I,MidHolo)
+    }
+    }
+    interval(1000)
+}
+else{
+interval(100)
+}
+
+
+holoPos(MidHolo,PL:pos() + vec(0,0,80))
+holoAng(MidHolo,ang(0,R,0))
+
+
+
+R += 3
+if(R > 360){R = 0}
+
+

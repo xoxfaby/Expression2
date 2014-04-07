@@ -1,0 +1,111 @@
+@name GravSim
+@inputs 
+@outputs 
+@persist ES:table GConst A B
+@trigger 
+
+
+if(first())
+{
+    GConst = 1000
+}
+
+foreach(K, V:table=ES)
+{
+foreach(KK, VV:table=ES)
+{
+if(K != KK && V["l",number] == 0){
+    Dist = V["pos",vector]:distance(VV["pos",vector])
+    D = V["D",vector]
+    Pos = V["pos",vector]
+    DV = (VV["pos",vector] - Pos):normalized()
+    
+    M1 = V["m",number]
+    M2 = VV["m",number]
+    
+    X = DV:x()
+    Y = DV:y()
+    Z = DV:z()
+    
+    GravDX = (M1* M2 * X * GConst) / max(1000, Dist ^ 2 )
+    GravDY = (M1* M2 * Y * GConst) / max(1000, Dist ^ 2 )
+    GravDZ = (M1* M2 * Z * GConst) / max(1000, Dist ^ 2 )
+    
+    GravD = vec(GravDX, GravDY, GravDZ)
+    
+    V["D",vector] = D + GravD
+    V["pos",vector] = Pos + D + GravD 
+}
+}
+}
+foreach(K,V:table=ES){
+    
+if(holoEntity(K:toNumber()))
+{
+    holoPos(K:toNumber(),V["pos",vector])
+}
+else
+{
+    holoCreate(K:toNumber(),V["pos",vector])
+}
+}
+
+if(!A)
+{
+    if(owner():keyAttack1())
+    {
+        A = 1
+        NE = table()
+        NE["pos",vector] = owner():aimPos()
+        if(owner():keyUse())
+        {
+        NE["D",vector] = vec(5,0,0)
+        }
+        else
+        {
+        NE["D",vector] = vec(0,0,0)
+          
+        }
+        NE["l",number] = 0
+        NE["m",number] = 1
+        ES[(ES:count() + 1):toString(),table] = NE:clone()
+    }
+    
+}
+else
+{
+    if(!owner():keyAttack1())
+    {
+        A = 0   
+    }   
+}
+
+if(!B)
+{
+    if(owner():keyAttack2())
+    {
+        B = 1
+        NE = table()
+        NE["pos",vector] = owner():aimPos()
+        NE["D",vector] = vec(0,0,0)
+        NE["l",number] = 1
+        NE["m",number] = 5
+        ES[(ES:count() + 1):toString(),table] = NE:clone()
+    }
+    
+}
+else
+{
+    if(!owner():keyAttack2())
+    {
+        B = 0   
+    }   
+}
+
+if(owner():keyReload())
+{
+    ES = table()
+}
+
+interval(10)
+

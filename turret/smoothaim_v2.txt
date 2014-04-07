@@ -1,0 +1,83 @@
+@name SmoothAim V2
+@inputs Pod:entity Camera:wirelink Base:entity EGP:wirelink Gun:wirelink AmmoOnFire
+@outputs Fire EGP512
+@persist E:entity Inertia:angle Angle:angle Power Damping Pitch1 Pitch2 Rn:ranger
+#@model models/hunter/blocks/cube1x1x025.mdl
+interval(10)
+if(first() | dupefinished())
+{
+    #include "physfunc"
+    E = entity():isWeldedTo()
+    Position=E:pos()
+    Camera["Position",vector]=E:toWorld(vec(0,-10,40))
+    Camera["Angle",angle]=E:angles()
+    Camera["Parent",entity]=E
+    soundPlay(1,0,"^acf_extra/tankfx/turretelectric.wav")
+    soundPlay(2,0,"^vehicles/tank_turret_loop1.wav")
+    Gun["Entity",entity]:soundPlay(3,0,"acf_extra/airfx/fire_alarm.wav")
+    soundPitch(1,0)
+    soundPitch(2,0)
+    soundPitch(3,0)
+    #Ranger Persist
+    rangerPersist(1)
+    rangerFilter(E)
+    rangerFilter(entity())
+    EGP512 = 1
+    #HUD Elements
+    EGP:egpLine(1,vec2(256,250),vec2(256,262))
+    EGP:egpLine(2,vec2(250,256),vec2(262,256))
+    EGP:egpBoxOutline(3,vec2(256,256),vec2(12,12))
+    EGP:egpLine(4,vec2(250,272),vec2(262,272))
+    EGP:egpLine(5,vec2(251,282),vec2(261,282))
+    EGP:egpLine(6,vec2(252,292),vec2(260,292))
+    EGP:egpLine(7,vec2(253,302),vec2(259,302))
+    EGP:egpLine(8,vec2(254,312),vec2(258,312))
+    EGP:egpLine(9,vec2(256,256),vec2(256,312))
+    #Ammo counter
+    EGP:egpText(10,"Ammo Left: ",vec2(190,250))
+    EGP:egpText(11,"Shots Left: ",vec2(190,260))
+    EGP:egpText(12,"R",vec2(250,230))
+    #3D tracker
+    EGP:egpBoxOutline(13,vec2(0,0),vec2(5,5))
+    EGP:egp3DTracker(14,E:pos())
+    EGP:egpParent(14,13)
+    
+    Power = 500
+    Damping = 100
+    Inertia = shiftL(ang(E:inertia()))
+} 
+
+Rn = rangerOffset(30000,E:pos(),E:forward())
+
+Camera["Activated",number]=Pod:driver():isValid()
+if(Pod:driver())
+{
+    #Set Ammo Count
+    EGP:egpSetText(10,"Ammo Left: "+Gun["AmmoCount",number])
+    EGP:egpSetText(11,"Shots Left: "+Gun["Shots Left",number])
+    EGP:egpSetText(12,toString(floor(toUnit("m",Rn:distance())))+"m")
+    EGP:egpPos(14,Rn:position())
+    
+    #Set Camera Zoom
+    Camera["Zoom",number]=100-(Pod:driver():keyAttack2()*75)
+    
+    #Turret Sounds
+    Pitch1 = clamp(abs(E:angVel():yaw())*1,Pitch1-2,clamp(Pitch1+2,0,75))
+    soundPitch(1,Pitch1)
+    Pitch2 = clamp(abs(E:angVel():pitch())*4,Pitch2-5,clamp(Pitch2+5,0,50))
+    soundPitch(2,Pitch2)
+    
+    #Apply actual angle force
+    E:applyAngForce((E:toLocal(Pod:driver():eyeAngles())* Power - E:angVel() * Damping) * Inertia)
+}
+else
+{
+    soundPitch(1,0)
+    soundPitch(2,0)
+    E:applyAngForce((E:toLocal(ang(0,0,0))* Power - E:angVel() * Damping) * Inertia)
+}
+
+soundPitch(3,AmmoOnFire*100)
+
+
+Fire=Pod:driver():keyAttack1()

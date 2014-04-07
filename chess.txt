@@ -1,0 +1,247 @@
+@name Chess
+@inputs 
+@outputs 
+@persist Player1:entity Player2:entity Board:table E:entity
+@trigger 
+runOnChat(1)
+
+if(first())
+{
+    E = entity()
+    
+    Player1 = findPlayerByName("XoXFapy")
+    Player2 = findPlayerByName("shadowscion")
+    
+    holoCreate(1)
+    holoPos(1,E:pos())
+    holoAng(1,ang(-90,0,0))   
+    holoModel(1,"models/props_phx/games/chess/board.mdl")
+    
+    Board["A1",table] = table()
+    Board["A2",table] = table()
+    Board["A3",table] = table()
+    Board["A4",table] = table()
+    Board["A5",table] = table()
+    Board["A6",table] = table()
+    Board["A7",table] = table()
+    Board["A8",table] = table()
+
+    Board["B1",table] = table()
+    Board["B2",table] = table()
+    Board["B3",table] = table()
+    Board["B4",table] = table()
+    Board["B5",table] = table()
+    Board["B6",table] = table()
+    Board["B7",table] = table()
+    Board["B8",table] = table()
+
+    Board["C1",table] = table()
+    Board["C2",table] = table()
+    Board["C3",table] = table()
+    Board["C4",table] = table()
+    Board["C5",table] = table()
+    Board["C6",table] = table()
+    Board["C7",table] = table()
+    Board["C8",table] = table()
+
+    Board["D1",table] = table()
+    Board["D2",table] = table()
+    Board["D3",table] = table()
+    Board["D4",table] = table()
+    Board["D5",table] = table()
+    Board["D6",table] = table()
+    Board["D7",table] = table()
+    Board["D8",table] = table()
+
+    Board["E1",table] = table()
+    Board["E2",table] = table()
+    Board["E3",table] = table()
+    Board["E4",table] = table()
+    Board["E5",table] = table()
+    Board["E6",table] = table()
+    Board["E7",table] = table()
+    Board["E8",table] = table()
+    
+    Board["F1",table] = table()
+    Board["F2",table] = table()
+    Board["F3",table] = table()
+    Board["F4",table] = table()
+    Board["F5",table] = table()
+    Board["F6",table] = table()
+    Board["F7",table] = table()
+    Board["F8",table] = table()
+
+    Board["G1",table] = table()
+    Board["G2",table] = table()
+    Board["G3",table] = table()
+    Board["G4",table] = table()
+    Board["G5",table] = table()
+    Board["G6",table] = table()
+    Board["G7",table] = table()
+    Board["G8",table] = table()
+
+    Board["H1",table] = table()
+    Board["H2",table] = table()
+    Board["H3",table] = table()
+    Board["H4",table] = table()
+    Board["H5",table] = table()
+    Board["H6",table] = table()
+    Board["H7",table] = table()
+    Board["H8",table] = table()
+
+    Board["A1",table]["pos",vector] = vec(-112,-112,20)
+    Board["A2",table]["pos",vector] = vec(-112,-80,20)
+    Board["A3",table]["pos",vector] = vec(-112,-48,20)
+    Board["A4",table]["pos",vector] = vec(-112,-16,20)
+    Board["A5",table]["pos",vector] = vec(-112,16,20)
+    Board["A6",table]["pos",vector] = vec(-112,48,20)
+    Board["A7",table]["pos",vector] = vec(-112,80,20)
+    Board["A8",table]["pos",vector] = vec(-112,112,20)
+
+    Board["B1",table]["pos",vector] = vec(-80,-112,20)
+    Board["B2",table]["pos",vector] = vec(-80,-80,20)
+    Board["B3",table]["pos",vector] = vec(-80,-48,20)
+    Board["B4",table]["pos",vector] = vec(-80,-16,20)
+    Board["B5",table]["pos",vector] = vec(-80,16,20)
+    Board["B6",table]["pos",vector] = vec(-80,48,20)
+    Board["B7",table]["pos",vector] = vec(-80,80,20)
+    Board["B8",table]["pos",vector] = vec(-80,112,20)
+
+    Board["C1",table]["pos",vector] = vec(-48,-112,20)
+    Board["C2",table]["pos",vector] = vec(-48,-80,20)
+    Board["C3",table]["pos",vector] = vec(-48,-48,20)
+    Board["C4",table]["pos",vector] = vec(-48,-16,20)
+    Board["C5",table]["pos",vector] = vec(-48,16,20)
+    Board["C6",table]["pos",vector] = vec(-48,48,20)
+    Board["C7",table]["pos",vector] = vec(-48,80,20)
+    Board["C8",table]["pos",vector] = vec(-48,112,20)
+
+    Board["D1",table]["pos",vector] = vec(-16,-112,20)
+    Board["D2",table]["pos",vector] = vec(-16,-80,20)
+    Board["D3",table]["pos",vector] = vec(-16,-48,20)
+    Board["D4",table]["pos",vector] = vec(-16,-16,20)
+    Board["D5",table]["pos",vector] = vec(-16,16,20)
+    Board["D6",table]["pos",vector] = vec(-16,48,20)
+    Board["D7",table]["pos",vector] = vec(-16,80,20)
+    Board["D8",table]["pos",vector] = vec(-16,112,20)
+    
+    Board["E1",table]["pos",vector] = vec(16,-112,20)
+    Board["E2",table]["pos",vector] = vec(16,-80,20)
+    Board["E3",table]["pos",vector] = vec(16,-48,20)
+    Board["E4",table]["pos",vector] = vec(16,-16,20)
+    Board["E5",table]["pos",vector] = vec(16,16,20)
+    Board["E6",table]["pos",vector] = vec(16,48,20)
+    Board["E7",table]["pos",vector] = vec(16,80,20)
+    Board["E8",table]["pos",vector] = vec(16,112,20)
+    
+    Board["F1",table]["pos",vector] = vec(48,-112,20)
+    Board["F2",table]["pos",vector] = vec(48,-80,20)
+    Board["F3",table]["pos",vector] = vec(48,-48,20)
+    Board["F4",table]["pos",vector] = vec(48,-16,20)
+    Board["F5",table]["pos",vector] = vec(48,16,20)
+    Board["F6",table]["pos",vector] = vec(48,48,20)
+    Board["F7",table]["pos",vector] = vec(48,80,20)
+    Board["F8",table]["pos",vector] = vec(48,112,20)
+    
+    Board["G1",table]["pos",vector] = vec(80,-112,20)
+    Board["G2",table]["pos",vector] = vec(80,-80,20)
+    Board["G3",table]["pos",vector] = vec(80,-48,20)
+    Board["G4",table]["pos",vector] = vec(80,-16,20)
+    Board["G5",table]["pos",vector] = vec(80,16,20)
+    Board["G6",table]["pos",vector] = vec(80,48,20)
+    Board["G7",table]["pos",vector] = vec(80,80,20)
+    Board["G8",table]["pos",vector] = vec(80,112,20)
+    
+    Board["H1",table]["pos",vector] = vec(112,-112,20)
+    Board["H2",table]["pos",vector] = vec(112,-80,20)
+    Board["H3",table]["pos",vector] = vec(112,-48,20)
+    Board["H4",table]["pos",vector] = vec(112,-16,20)
+    Board["H5",table]["pos",vector] = vec(112,16,20)
+    Board["H6",table]["pos",vector] = vec(112,48,20)
+    Board["H7",table]["pos",vector] = vec(112,80,20)
+    Board["H8",table]["pos",vector] = vec(112,112,20)    
+
+    I = 10
+    foreach(K,V:table=Board)
+    {
+        I++
+        holoCreate(I,E:pos()  + V["pos",vector] )   
+        holoAlpha(I,0)
+        V["holo",number] = I
+    }
+    holoModel(Board["A2",table]["holo",number],"models/props_phx/games/chess/white_pawn.mdl")
+    holoModel(Board["B2",table]["holo",number],"models/props_phx/games/chess/white_pawn.mdl")
+    holoModel(Board["C2",table]["holo",number],"models/props_phx/games/chess/white_pawn.mdl")
+    holoModel(Board["D2",table]["holo",number],"models/props_phx/games/chess/white_pawn.mdl")
+    holoModel(Board["E2",table]["holo",number],"models/props_phx/games/chess/white_pawn.mdl")
+    holoModel(Board["F2",table]["holo",number],"models/props_phx/games/chess/white_pawn.mdl")
+    holoModel(Board["G2",table]["holo",number],"models/props_phx/games/chess/white_pawn.mdl")
+    holoModel(Board["H2",table]["holo",number],"models/props_phx/games/chess/white_pawn.mdl")
+    
+    holoModel(Board["A7",table]["holo",number],"models/props_phx/games/chess/black_pawn.mdl")
+    holoModel(Board["B7",table]["holo",number],"models/props_phx/games/chess/black_pawn.mdl")
+    holoModel(Board["C7",table]["holo",number],"models/props_phx/games/chess/black_pawn.mdl")
+    holoModel(Board["D7",table]["holo",number],"models/props_phx/games/chess/black_pawn.mdl")
+    holoModel(Board["E7",table]["holo",number],"models/props_phx/games/chess/black_pawn.mdl")
+    holoModel(Board["F7",table]["holo",number],"models/props_phx/games/chess/black_pawn.mdl")
+    holoModel(Board["G7",table]["holo",number],"models/props_phx/games/chess/black_pawn.mdl")
+    holoModel(Board["H7",table]["holo",number],"models/props_phx/games/chess/black_pawn.mdl")
+    
+    holoModel(Board["A1",table]["holo",number],"models/props_phx/games/chess/white_rook.mdl")
+    holoModel(Board["B1",table]["holo",number],"models/props_phx/games/chess/white_knight.mdl")
+    holoModel(Board["C1",table]["holo",number],"models/props_phx/games/chess/white_bishop.mdl")
+    holoModel(Board["D1",table]["holo",number],"models/props_phx/games/chess/white_queen.mdl")
+    holoModel(Board["E1",table]["holo",number],"models/props_phx/games/chess/white_king.mdl")
+    holoModel(Board["F1",table]["holo",number],"models/props_phx/games/chess/white_bishop.mdl")
+    holoModel(Board["G1",table]["holo",number],"models/props_phx/games/chess/white_knight.mdl")
+    holoModel(Board["H1",table]["holo",number],"models/props_phx/games/chess/white_rook.mdl")
+    
+    holoModel(Board["A8",table]["holo",number],"models/props_phx/games/chess/black_rook.mdl")
+    holoModel(Board["B8",table]["holo",number],"models/props_phx/games/chess/black_knight.mdl")
+    holoModel(Board["C8",table]["holo",number],"models/props_phx/games/chess/black_bishop.mdl")
+    holoModel(Board["D8",table]["holo",number],"models/props_phx/games/chess/black_queen.mdl")
+    holoModel(Board["E8",table]["holo",number],"models/props_phx/games/chess/black_king.mdl")
+    holoModel(Board["F8",table]["holo",number],"models/props_phx/games/chess/black_bishop.mdl")
+    holoModel(Board["G8",table]["holo",number],"models/props_phx/games/chess/black_knight.mdl")
+    holoModel(Board["H8",table]["holo",number],"models/props_phx/games/chess/black_rook.mdl")
+}
+
+if(lastSpoke() == Player1 || lastSpoke() == Player2)
+{
+if(lastSaid():sub(1,1) == "@")
+{
+A = lastSaid():sub(2,3):upper()
+B = lastSaid():sub(5,6):upper()
+
+holoModel(Board[B,table]["holo",number],holoEntity(Board[A,table]["holo",number]):model())
+holoModel(Board[A,table]["holo",number],"cube")
+}elseif(lastSaid():sub(1,1) == "#"){
+A = lastSaid():sub(2,3):upper()
+B = lastSaid():sub(5,5)
+C = lastSaid():sub(7)
+
+B = B:lower()
+C = C:lower()
+
+if(B == "w"){B = "white"}
+elseif(B == "b"){B = "black"}
+
+holoModel(Board[A,table]["holo",number],"models/props_phx/games/chess/" + B + "_" + C + ".mdl")
+
+}
+}
+foreach(K,V:table=Board)
+{
+    if(holoEntity(V["holo",number]):model() == "models/holograms/cube.mdl")   {
+        holoAlpha(V["holo",number],0)
+    }else{
+        holoAlpha(V["holo",number],255)
+    } 
+    if(holoEntity(V["holo",number]):model():find("knight")){
+        if(holoEntity(V["holo",number]):model():find("white")){
+            holoAng(V["holo",number],ang(0,90,0))   
+        }else{
+            holoAng(V["holo",number],ang(0,-90,0))
+        }
+    }
+}

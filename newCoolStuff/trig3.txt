@@ -1,0 +1,275 @@
+@name Trig2
+@inputs  
+@outputs 
+@persist Step A B TT E:entity Vec1:vector Mode1:string OVec1:vector NVec1:vector T1 Vec2:vector Mode2:string OVec2:vector NVec2:vector T2 Vec3:vector Mode3:string OVec3:vector NVec3:vector T3 Vec4:vector Mode4:string OVec4:vector NVec4:vector T4
+@trigger 
+@model models/sprops/cuboids/height12/size_1/cube_12x12x12.mdl
+TT+=5
+RD = rangerAngle(-90,0,0)
+GDist = RD:distance()
+
+if(first())
+{
+    Mode1 = "wait"
+    A = 40
+    B = 50
+    E = entity()
+    E:setMass(10)
+    
+    Vec1 = E:pos() + vec(20,40,0)
+    Vec2 = E:pos() + vec(20,-40,0)
+    Vec3 = E:pos() + vec(-20,40,0)
+    Vec4 = E:pos() + vec(-20,-40,0)
+
+    holoCreate(1,E:pos(), vec(1,1,1), ang(0,0,0))
+    holoParent(1,E)
+    holoModel(1,"models/props_c17/FurnitureWashingmachine001a.mdl")
+    
+        
+    holoCreate(2,E:pos() + vec(A,0,0))
+    holoParent(2,1)
+
+    
+    holoCreate(3,E:pos() + vec(A / 2,0,0))
+    holoParent(3,1)
+    holoScale(3,vec(A/12,0.1,0.1))
+       
+    
+    holoCreate(4,holoEntity(2):pos() + vec(B / 2,0,0))
+    holoParent(4,2)
+    holoScale(4,vec(B/12,0.1,0.1))
+    
+    holoCreate(5,E:pos(), vec(1,1,1), ang(0,0,0))
+    holoParent(5,E)
+    
+    holoCreate(6,E:pos() + vec(A,0,0))
+    holoParent(6,5)
+
+    
+    holoCreate(7,E:pos() + vec(A / 2,0,0))
+    holoParent(7,5)
+    holoScale(7,vec(A/12,0.1,0.1))
+       
+    
+    holoCreate(8,holoEntity(2):pos() + vec(B / 2,0,0))
+    holoParent(8,6)
+    holoScale(8,vec(B/12,0.1,0.1))
+    
+    
+    holoCreate(9,E:pos(), vec(1,1,1), ang(0,0,0))
+    holoParent(9,E)
+    
+    holoCreate(10,E:pos() + vec(A,0,0))
+    holoParent(10,9)
+
+    
+    holoCreate(11,E:pos() + vec(A / 2,0,0))
+    holoParent(11,9)
+    holoScale(11,vec(A/12,0.1,0.1))
+       
+    
+    holoCreate(12,holoEntity(10):pos() + vec(B / 2,0,0))
+    holoParent(12,10)
+    holoScale(12,vec(B/12,0.1,0.1))
+    
+    
+    holoCreate(13,E:pos(), vec(1,1,1), ang(0,0,0))
+    holoParent(13,E)
+    
+    holoCreate(14,E:pos() + vec(A,0,0))
+    holoParent(14,13)
+
+    
+    holoCreate(15,E:pos() + vec(A / 2,0,0))
+    holoParent(15,13)
+    holoScale(15,vec(A/12,0.1,0.1))
+       
+    
+    holoCreate(16,holoEntity(14):pos() + vec(B / 2,0,0))
+    holoParent(16,14)
+    holoScale(16,vec(B/12,0.1,0.1))
+    
+   
+      
+    for(I = 2,2)
+    {
+        holoAlpha(I,0)   
+    }
+    for(I = 5,6)
+    {
+        holoAlpha(I,0)   
+    }
+    for(I = 9,10)
+    {
+        holoAlpha(I,0)   
+    }
+    for(I = 13,14)
+    {
+        holoAlpha(I,0)   
+    }
+    
+    
+    E:setPos(E:pos() + vec(0,0,25))
+    entity():propFreeze(1)
+}
+    else
+    {
+        E:setPos( (((Vec1 + Vec2 + Vec3 + Vec4) / 4) + vec(0,0,25)))
+        E:setAng((owner():aimPos() - E:pos()):toAngle():setRoll(0):setPitch(0))
+    }
+if(E:pos():distance(Vec1) > 200){
+    Vec1 = E:pos() + vec(25,40,-GDist)
+}
+if(Mode1 == "wait"){
+if(TT == 25)
+{
+    Mode1 = "think"
+}
+}elseif(Mode1 == "think"){
+    OVec1 = Vec1
+    NVec1 = OVec1 + E:forward():setZ(0) * 50
+    Mode1 = "move" 
+}elseif(Mode1 == "move"){
+    Vec1 = mix(NVec1,OVec1,T1)
+    BezierVec = vec2(0,0)
+    BezierVec = (1-T1) ^ 2 * vec2(0,0) + 2*(1-T1)*T1*vec2(50,50)+T1^2*vec2(0,200)
+    Vec1 += vec(0,0,BezierVec:x())
+    T1 = T1 + 0.1
+    if(T1 >= 1){
+        T1 = 0
+        Mode1 = "wait"
+        Vec1 = NVec1   
+    }
+}else{
+    Mode1 = "wait"   
+}
+
+
+
+
+if(E:pos():distance(Vec2) > 200){
+    Vec2 = E:pos() + vec(-25,-40,-GDist)  
+}
+if(Mode2 == "wait"){
+if(TT == 50)
+{
+    Mode2 = "think"
+}
+}elseif(Mode2 == "think"){
+    OVec2 = Vec2
+    NVec2 = OVec2 + E:forward():setZ(0) * 50
+    Mode2 = "move" 
+}elseif(Mode2 == "move"){
+    Vec2 = mix(NVec2,OVec2,T2)
+    BezierVec = vec2(0,0)
+    BezierVec = (1-T2) ^ 2 * vec2(0,0) + 2*(1-T2)*T2*vec2(50,50)+T2^2*vec2(0,200)
+    Vec2 += vec(0,0,BezierVec:x())
+    T2 = T2 + 0.1
+    if(T2 >= 1){
+        T2 = 0
+        Mode2 = "wait"
+        Vec2 = NVec2   
+    }
+}else{
+    Mode2 = "wait"   
+}
+
+
+
+if(E:pos():distance(Vec3) > 200){
+    Vec3 = E:pos() + vec(-25,-40,-GDist)  
+}
+if(Mode3 == "wait"){
+if(TT == 75)
+{
+    Mode3 = "think"
+}
+}elseif(Mode3 == "think"){
+    OVec3 = Vec3
+    NVec3 = OVec3 + E:forward():setZ(0) * 50
+    Mode3 = "move" 
+}elseif(Mode3 == "move"){
+    Vec3 = mix(NVec3,OVec3,T3)
+    BezierVec = vec2(0,0)
+    BezierVec = (1-T3) ^ 2 * vec2(0,0) + 2*(1-T3)*T3*vec2(50,50)+T3^2*vec2(0,200)
+    Vec3 += vec(0,0,BezierVec:x())
+    T3 = T3 + 0.1
+    if(T3 >= 1){
+        T3 = 0
+        Mode3 = "wait"
+        Vec3 = NVec3   
+    }
+}else{
+    Mode3 = "wait"   
+}
+
+
+
+
+if(E:pos():distance(Vec4) > 200){
+    Vec4 = E:pos() + vec(-25,-40,-GDist)  
+}
+if(Mode4 == "wait"){
+if(TT == 100)
+{
+    Mode4 = "think"
+}
+}elseif(Mode4 == "think"){
+    OVec4 = Vec4
+    NVec4 = OVec4 + E:forward():setZ(0) * 50
+    Mode4 = "move" 
+}elseif(Mode4 == "move"){
+    Vec4 = mix(NVec4,OVec4,T4)
+    BezierVec = vec2(0,0)
+    BezierVec = (1-T4) ^ 2 * vec2(0,0) + 2*(1-T4)*T4*vec2(50,50)+T4^2*vec2(0,200)
+    Vec4 += vec(0,0,BezierVec:x())
+    T4 = T4 + 0.1
+    if(T4 >= 1){
+        T4 = 0
+        Mode4 = "wait"
+        Vec4 = NVec4   
+    }
+}else{
+    Mode4 = "wait"   
+}
+
+
+
+
+
+
+C1 = min(Vec1:distance(entity():pos()),A+B)
+C2 = min(Vec2:distance(entity():pos()),A+B)
+C3 = min(Vec3:distance(entity():pos()),A+B)
+C4 = min(Vec4:distance(entity():pos()),A+B)
+
+A11 = acos(((A^2) + (C1^2) - (B^2)) / ( 2*A*C1 ))
+A12 = acos(((A^2) + (B^2) - (C1^2)) / ( 2*A*B ))
+
+A21 = acos(((A^2) + (C2^2) - (B^2)) / ( 2*A*C2 ))
+A22 = acos(((A^2) + (B^2) - (C2^2)) / ( 2*A*B ))
+
+A31 = acos(((A^2) + (C3^2) - (B^2)) / ( 2*A*C3 ))
+A32 = acos(((A^2) + (B^2) - (C3^2)) / ( 2*A*B ))
+
+A41 = acos(((A^2) + (C4^2) - (B^2)) / ( 2*A*C4 ))
+A42 = acos(((A^2) + (B^2) - (C4^2)) / ( 2*A*B ))
+
+
+holoAng(1,(E:pos() - Vec1):toAngle() + ang( 180+A11,0,0))
+holoAng(2,holoEntity(1):toWorld(ang(180+ A12,0,0)))
+
+holoAng(5,(E:pos() - Vec2):toAngle() + ang( 180+A21,0,0))
+holoAng(6,holoEntity(5):toWorld(ang(180+ A22,0,0)))
+
+holoAng(9,(E:pos() - Vec3):toAngle() + ang( 180+A31,0,0))
+holoAng(10,holoEntity(9):toWorld(ang(180+ A32,0,0)))
+
+holoAng(13,(E:pos() - Vec4):toAngle() + ang( 180+A41,0,0))
+holoAng(14,holoEntity(13):toWorld(ang(180+ A42,0,0)))
+
+interval(10000)
+
+if(TT == 100){TT = 0}
+
+

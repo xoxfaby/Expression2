@@ -1,0 +1,20 @@
+@name dont sit
+@inputs 
+@outputs 
+@persist W:entity
+@trigger 
+
+
+if(first())
+{
+    findByClass("prop_vehicle_prisoner_pod")
+    T = findToArray()
+    interval(500)
+}
+
+foreach(K,V:entity=T)
+{
+V:killPod()
+}
+
+selfDestruct()

@@ -1,0 +1,58 @@
+@name Rewind
+@inputs 
+@outputs 
+@persist Props:array PL:entity Rewind:table AT
+@trigger 
+
+runOnTick(1)
+
+if(first()){
+findByClass("prop_physics")
+AProps = findToArray()   
+PL = findPlayerByName("XoXFaby") 
+
+foreach(K,V:entity=AProps){
+if(V:owner() == PL)
+{
+   Props[Props:count()+1, entity] = V 
+}
+}
+    
+}
+else{
+if(PL:weapon():type() == "weapon_crowbar" && AT){
+
+foreach(K,V:table=Rewind[Rewind:count(),table]){
+
+Prop = Props[K:toNumber(),entity]
+Prop:setPos(V["pos",vector])
+Prop:setAng(V["ang",angle])
+if(PL:keyAttack1()){
+Prop:propFreeze(1)    
+}else{
+Prop:propFreeze(V["f",number])
+}
+}
+if(Rewind:count() > 1){
+Rewind:remove(Rewind:count())
+}
+}
+else{
+PosT = table()
+foreach(K,V:entity=Props){
+PT = table()
+PT["pos",vector] = V:pos()
+PT["ang",angle] = V:angles()
+PT["f",number] = V:isFrozen()
+PosT[K:toString(),table] = PT:clone()
+}
+Rewind[Rewind:count()+1,table] = PosT:clone()
+}
+
+}
+
+if(PL:keyAttack1()){
+AT = 1   
+}else{
+AT = 0
+}

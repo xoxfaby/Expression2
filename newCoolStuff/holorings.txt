@@ -1,0 +1,27 @@
+@name HoloRings
+@inputs 
+@outputs 
+@persist 
+@trigger 
+@model
+#hq_torus_thin
+if(first()){
+for(I = 1, 50)
+{
+    holoCreate(I,entity():pos(),vec(I,I,1),entity():angles(),vec(255,0,255)) 
+    holoModel(I,"hq_torus_thin")
+}
+}
+
+for(I = 50,1,-1)
+{
+if( I == 1 ) { 
+    holoAng(I,entity():angles()) 
+    holoPos(I,entity():pos())
+} else { 
+    holoAng(I,holoEntity(I-1):angles())
+    holoPos(I,holoEntity(I-1):pos())
+    }
+}
+
+interval(50)

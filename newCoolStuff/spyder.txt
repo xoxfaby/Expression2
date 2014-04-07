@@ -1,0 +1,388 @@
+@name Spyder
+@inputs 
+@outputs 
+@persist Legs:table Holos:table E:entity Loaded LO ModeA:string ModeB:string Side:string AT BT CAng:angle
+@trigger 
+
+if(first() || dupefinished())
+{
+    HAng = ang(-10,0,0)
+    CAng = ang(0,0,0)
+    ModeA = "wait"
+    ModeB = "wait"
+    Side = "L"
+    Loaded = 0
+    LO = 1
+    entity():propNotSolid(1)
+    function void choloCreate(HIndex,HPos:vector,HScale:vector,HAngle:angle,HColor:vector,HAlpha,HParent:string,HModel:string)
+    {
+        Holos[Holos:count()+1,table] = table()
+        Holos[Holos:count(),table]["HIndex",number] = HIndex
+        Holos[Holos:count(),table]["HPos",vector] = HPos
+        Holos[Holos:count(),table]["HScale",vector] = HScale
+        Holos[Holos:count(),table]["HAngle",angle] = HAngle
+        Holos[Holos:count(),table]["HColor",vector] = HColor
+        Holos[Holos:count(),table]["HAlpha",number] = HAlpha
+        Holos[Holos:count(),table]["HParent",string] = HParent
+        Holos[Holos:count(),table]["HModel",string] = HModel
+        
+        
+    }
+    function void choloCreate(HIndex,HPos:vector,HScale:vector,HAngle:angle,HColor:vector,HAlpha,HParent:string)
+    {
+        Holos[Holos:count()+1,table] = table()
+        Holos[Holos:count(),table]["HIndex",number] = HIndex
+        Holos[Holos:count(),table]["HPos",vector] = HPos
+        Holos[Holos:count(),table]["HScale",vector] = HScale
+        Holos[Holos:count(),table]["HAngle",angle] = HAngle
+        Holos[Holos:count(),table]["HColor",vector] = HColor
+        Holos[Holos:count(),table]["HAlpha",number] = HAlpha
+        Holos[Holos:count(),table]["HParent",string] = HParent
+        Holos[Holos:count(),table]["HModel",string] = "cube"
+        
+        
+    }
+    
+    function vector2 bezier(Points:array,T)
+    {
+        while(Points:count() > 1){
+            NewPoints = array()
+            foreach(K,V:vector2=Points)
+            {
+                NewPoints[NewPoints:count(),vector2] = V + T * ( Points[K + 1,vector2] - V )
+            } 
+            Points = NewPoints:clone()  
+        }
+        return Points[1,vector2]   
+    }
+    
+    E = entity()
+    E:propFreeze(1)
+    E:setAng(CAng)
+            
+    Holos = table()
+    Legs = table()
+    
+    
+    choloCreate(1,E:pos(),vec(1.7,1.5,1.3),ang(0,0,0),vec(0,0,0),1,"E","hq_sphere")    
+    local BDist = 22
+    choloCreate(2,E:pos() + vec(-BDist,0,10),vec(BDist / 5.7,3,3),ang(10,0,0),vec(0,0,0),1,"E","hq_sphere")
+    
+    Legs[1,table] = table()
+    Legs[2,table] = table()
+    Legs[3,table] = table()
+    Legs[4,table] = table()
+    Legs[5,table] = table()
+    Legs[6,table] = table()
+    Legs[7,table] = table()
+    Legs[8,table] = table()
+    
+        
+    Legs[1,table]["ALen",number] = 4
+    Legs[1,table]["BLen",number] = 23
+    Legs[1,table]["CLen",number] = 20
+    Legs[1,table]["DLen",number] = 38
+    Legs[1,table]["FLen",number] = 5
+        
+    Legs[5,table]["ALen",number] = 4
+    Legs[5,table]["BLen",number] = 23
+    Legs[5,table]["CLen",number] = 20
+    Legs[5,table]["DLen",number] = 38
+    Legs[5,table]["FLen",number] = 5
+        
+    Legs[2,table]["ALen",number] = 4
+    Legs[2,table]["BLen",number] = 20
+    Legs[2,table]["CLen",number] = 13
+    Legs[2,table]["DLen",number] = 35
+    Legs[2,table]["FLen",number] = 5
+        
+    Legs[6,table]["ALen",number] = 4
+    Legs[6,table]["BLen",number] = 20
+    Legs[6,table]["CLen",number] = 10
+    Legs[6,table]["DLen",number] = 35
+    Legs[6,table]["FLen",number] = 5
+        
+    Legs[3,table]["ALen",number] = 4
+    Legs[3,table]["BLen",number] = 20
+    Legs[3,table]["CLen",number] = 10
+    Legs[3,table]["DLen",number] = 35
+    Legs[3,table]["FLen",number] = 5
+    
+    Legs[7,table]["ALen",number] = 4
+    Legs[7,table]["BLen",number] = 20
+    Legs[7,table]["CLen",number] = 10
+    Legs[7,table]["DLen",number] = 35
+    Legs[7,table]["FLen",number] = 5  
+      
+    Legs[4,table]["ALen",number] = 4
+    Legs[4,table]["BLen",number] = 20
+    Legs[4,table]["CLen",number] = 10
+    Legs[4,table]["DLen",number] = 35
+    Legs[4,table]["FLen",number] = 5
+        
+    Legs[8,table]["ALen",number] = 4
+    Legs[8,table]["BLen",number] = 20
+    Legs[8,table]["CLen",number] = 10
+    Legs[8,table]["DLen",number] = 35
+    Legs[8,table]["FLen",number] = 5
+    
+    Legs[1,table]["IOff",number] = 20
+    Legs[2,table]["IOff",number] = 40
+    Legs[3,table]["IOff",number] = 60
+    Legs[4,table]["IOff",number] = 80
+    Legs[5,table]["IOff",number] = 100
+    Legs[6,table]["IOff",number] = 120
+    Legs[7,table]["IOff",number] = 140
+    Legs[8,table]["IOff",number] = 160
+    
+    Legs[1,table]["POff",vector] = vec(6,3,0)
+    Legs[2,table]["POff",vector] = vec(2,6,0)
+    Legs[3,table]["POff",vector] = vec(-2,6,0)
+    Legs[4,table]["POff",vector] = vec(-6,4,0)
+    Legs[5,table]["POff",vector] = vec(6,-3,0)
+    Legs[6,table]["POff",vector] = vec(2,-6,0)
+    Legs[7,table]["POff",vector] = vec(-2,-6,0)
+    Legs[8,table]["POff",vector] = vec(-6,-4,0)
+    
+    Legs[1,table]["TOff",vector] = vec(60,40,0)
+    Legs[2,table]["TOff",vector] = vec(20,60,0)
+    Legs[3,table]["TOff",vector] = vec(-20,60,0)
+    Legs[4,table]["TOff",vector] = vec(-30,40,0)
+    Legs[5,table]["TOff",vector] = vec(60,-40,0)
+    Legs[6,table]["TOff",vector] = vec(20,-60,0)
+    Legs[7,table]["TOff",vector] = vec(-20,-60,0)
+    Legs[8,table]["TOff",vector] = vec(-30,-40,0)
+    
+    
+    Legs[1,table]["T",vector] = E:pos() + Legs[1,table]["TOff",vector] 
+    Legs[2,table]["T",vector] = E:pos() + Legs[2,table]["TOff",vector] 
+    Legs[3,table]["T",vector] = E:pos() + Legs[3,table]["TOff",vector] 
+    Legs[4,table]["T",vector] = E:pos() + Legs[4,table]["TOff",vector] 
+    Legs[5,table]["T",vector] = E:pos() + Legs[5,table]["TOff",vector] 
+    Legs[6,table]["T",vector] = E:pos() + Legs[6,table]["TOff",vector] 
+    Legs[7,table]["T",vector] = E:pos() + Legs[7,table]["TOff",vector] 
+    Legs[8,table]["T",vector] = E:pos() + Legs[8,table]["TOff",vector] 
+    
+    Legs[1,table]["OT",vector] = E:pos() + Legs[1,table]["TOff",vector] 
+    Legs[2,table]["OT",vector] = E:pos() + Legs[2,table]["TOff",vector] 
+    Legs[3,table]["OT",vector] = E:pos() + Legs[3,table]["TOff",vector] 
+    Legs[4,table]["OT",vector] = E:pos() + Legs[4,table]["TOff",vector] 
+    Legs[5,table]["OT",vector] = E:pos() + Legs[5,table]["TOff",vector] 
+    Legs[6,table]["OT",vector] = E:pos() + Legs[6,table]["TOff",vector] 
+    Legs[7,table]["OT",vector] = E:pos() + Legs[7,table]["TOff",vector] 
+    Legs[8,table]["OT",vector] = E:pos() + Legs[8,table]["TOff",vector] 
+    
+    Legs[1,table]["NT",vector] = E:pos() + vec(60,40,0)
+    Legs[2,table]["NT",vector] = E:pos() + vec(20,60,0)
+    Legs[3,table]["NT",vector] = E:pos() + vec(-20,60,0)
+    Legs[4,table]["NT",vector] = E:pos() + vec(-60,40,0)
+    Legs[5,table]["NT",vector] = E:pos() + vec(60,-40,0)
+    Legs[6,table]["NT",vector] = E:pos() + vec(20,-60,0)
+    Legs[7,table]["NT",vector] = E:pos() + vec(-20,-60,0)
+    Legs[8,table]["NT",vector] = E:pos() + vec(-60,-40,0)
+    
+    for(I = 1,8){
+        IO = Legs[I,table]["IOff",number]    
+        PO = Legs[I,table]["POff",vector]
+        
+    
+        ALen = Legs[I,table]["ALen",number]
+        BLen = Legs[I,table]["BLen",number]
+        CLen = Legs[I,table]["CLen",number]
+        DLen = Legs[I,table]["DLen",number]
+        FLen = Legs[I,table]["FLen",number]
+        
+        #choloCreate(T,HIndex,HPos:vector,HScale:vector,HAngle:angle,HColor:vector,HAlpha,HParent)
+        
+        choloCreate(IO + 1,E:pos() + PO,                            vec(0.1,0.1,0.1),ang(0,0,0),vec(0,0,0),0,"1" )
+        choloCreate(IO + 2,E:pos() + PO + vec(ALen,0,0),vec(0.1,0.1,0.1),ang(0,0,0),vec(0,0,0),0,(IO + 1):toString() )
+        choloCreate(IO + 3,E:pos() + PO + vec(ALen,0,0) + vec(BLen,0,0),vec(0.1,0.1,0.1),ang(0,0,0),vec(0,0,0),0,(IO + 2):toString() )
+        choloCreate(IO + 4,E:pos() + PO + vec(ALen,0,0) + vec(BLen,0,0) + vec(CLen,0,0),vec(0.1,0.1,0.1),ang(0,0,0),vec(0,0,0),0,(IO + 3):toString() )
+        choloCreate(IO + 5,E:pos() + PO + vec(ALen,0,0) + vec(BLen,0,0) + vec(CLen,0,0) + vec(DLen,0,0),vec(0.1,0.1,0.1),ang(0,0,0),vec(0,0,0),0,(IO + 4):toString() )
+ 
+        choloCreate(IO + 11,E:pos() + PO + vec(ALen/2,0,0),vec(ALen/12,0.05,0.05),ang(0,0,0),vec(0,0,0),1,(IO + 1):toString() )
+        choloCreate(IO + 12,E:pos() + PO + vec(ALen,0,0) + vec(BLen/2,0,0),vec(BLen/12,0.05,0.05),ang(0,0,0),vec(0,0,0),1,(IO + 2):toString() )
+        choloCreate(IO + 13,E:pos() + PO + vec(ALen,0,0) + vec(BLen,0,0) + vec(CLen/2,0,0),vec(CLen/12,0.05,0.05),ang(0,0,0),vec(0,0,0),1,(IO + 3):toString() )
+        choloCreate(IO + 14,E:pos() + PO + vec(ALen,0,0) + vec(BLen,0,0) + vec(CLen,0,0) + vec(DLen/2,0,0),vec(DLen/12,0.05,0.05),ang(0,0,0),vec(0,0,0),1,(IO + 4):toString() )
+        choloCreate(IO + 15,E:pos() + PO + vec(ALen,0,0) + vec(BLen,0,0) + vec(CLen,0,0) + vec(DLen,0,0) + vec(FLen/2,0,0),vec(FLen/12,0.05,0.05),ang(0,0,0),vec(0,0,0),1,(IO + 5):toString() )
+        
+        interval(500)
+    }
+} elseif(!Loaded) {
+
+    if(LO <= Holos:count() && holoCanCreate() ){
+        
+
+        HIndex = Holos[LO,table]["HIndex",number]
+        HPos = Holos[LO,table]["HPos",vector]
+        HScale = Holos[LO,table]["HScale",vector]
+        HAngle = Holos[LO,table]["HAngle",angle]
+        HColor = Holos[LO,table]["HColor",vector]
+        HAlpha = Holos[LO,table]["HAlpha",number]
+        HParent = Holos[LO,table]["HParent",string]
+        HModel = Holos[LO,table]["HModel",string]
+        holoCreate( HIndex, HPos, HScale, HAngle,HColor)
+        holoAlpha( HIndex, HAlpha * 255)
+        if(HParent == "E")
+        {
+            holoParent(HIndex,E)
+        }
+        else
+        {
+            holoParent(HIndex,HParent:toNumber())
+        }
+        if(HParent != "")
+        {
+            holoModel(HIndex,HModel)
+        }
+        LO++
+        interval(50)
+    }elseif( LO > Holos:count() ){Loaded = 1,LO--,interval(50)}
+    
+setName("Loading Holos: " +LO+ "/"+ Holos:count() )
+} else {
+RD = rangerOffset(1000,E:pos(),vec(0,0,-1))
+Z = RD:pos():z()
+
+E:propFreeze(1)
+E:setAng(CAng)
+CPos = (Legs[1,table]["T",vector] + Legs[2,table]["T",vector] + Legs[3,table]["T",vector] + Legs[4,table]["T",vector] + Legs[5,table]["T",vector] + Legs[6,table]["T",vector] + Legs[7,table]["T",vector] + Legs[8,table]["T",vector]  ) / 8 + vec(0,0,20) 
+
+
+E:setPos( E:pos() - ( E:pos() - CPos ):normalized() * (E:pos() - CPos):length())
+
+    if(ModeA == "wait" && ModeB == "wait" && owner():keyReload()){
+        if(Side == "A"){
+            Side = "B"
+            ModeB = "think"
+        }else{
+            Side = "A"
+            ModeA = "think"
+        }
+    }
+
+    if(ModeA == "think")
+    {
+        Legs[1,table]["OT",vector] = Legs[1,table]["T",vector]
+        Legs[1,table]["NT",vector] = (E:pos() + Legs[1,table]["TOff",vector] + ( E:forward() * 40 ) ):setZ(Z)
+        Legs[3,table]["OT",vector] = Legs[3,table]["T",vector]
+        Legs[3,table]["NT",vector] = (E:pos() + Legs[3,table]["TOff",vector] + ( E:forward() * 40 ) ):setZ(Z)
+        Legs[6,table]["OT",vector] = Legs[6,table]["T",vector]
+        Legs[6,table]["NT",vector] = (E:pos() + Legs[6,table]["TOff",vector] + ( E:forward() * 40 ) ):setZ(Z) 
+        Legs[8,table]["OT",vector] = Legs[8,table]["T",vector]
+        Legs[8,table]["NT",vector] = (E:pos() + Legs[8,table]["TOff",vector] + ( E:forward() * 40 ) ):setZ(Z) 
+        
+        ModeA = "move"
+    }elseif(ModeA == "move"){
+        BezierVec = vec2(0,0)
+        BezierVec = (1-AT) ^ 2 * vec2(0,0) + 2*(1-AT)*AT*vec2(70,10)+AT^2*vec2(100,0)
+        
+        
+        Legs[1,table]["T",vector] = mix(Legs[1,table]["NT",vector],Legs[1,table]["OT",vector],BezierVec:x()/100)
+        Legs[1,table]["T",vector] = Legs[1,table]["T",vector] + vec(0,0,BezierVec:y())
+        Legs[3,table]["T",vector] = mix(Legs[3,table]["NT",vector],Legs[3,table]["OT",vector],BezierVec:x()/100)
+        Legs[3,table]["T",vector] = Legs[3,table]["T",vector] + vec(0,0,BezierVec:y())
+        Legs[6,table]["T",vector] = mix(Legs[6,table]["NT",vector],Legs[6,table]["OT",vector],BezierVec:x()/100)
+        Legs[6,table]["T",vector] = Legs[6,table]["T",vector] + vec(0,0,BezierVec:y())
+        Legs[8,table]["T",vector] = mix(Legs[8,table]["NT",vector],Legs[8,table]["OT",vector],BezierVec:x()/100)
+        Legs[8,table]["T",vector] = Legs[8,table]["T",vector] + vec(0,0,BezierVec:y())
+            
+            
+            
+            
+            
+            
+        AT = AT + 0.1
+        if(AT >= 1){
+            AT = 0
+            ModeA = "wait"
+            
+            Legs[1,table]["T",vector] = Legs[1,table]["NT",vector] 
+            Legs[3,table]["T",vector] = Legs[3,table]["NT",vector] 
+            Legs[6,table]["T",vector] = Legs[6,table]["NT",vector] 
+            Legs[8,table]["T",vector] = Legs[8,table]["NT",vector] 
+        }
+    }
+    if(ModeB == "think")
+    {
+        Legs[5,table]["OT",vector] = Legs[5,table]["T",vector]
+        Legs[5,table]["NT",vector] = (E:pos() + Legs[5,table]["TOff",vector] + ( E:forward() * 40 ) ):setZ(Z) 
+        Legs[7,table]["OT",vector] = Legs[7,table]["T",vector]
+        Legs[7,table]["NT",vector] = (E:pos() + Legs[7,table]["TOff",vector] + ( E:forward() * 40 ) ):setZ(Z) 
+        Legs[2,table]["OT",vector] = Legs[2,table]["T",vector]
+        Legs[2,table]["NT",vector] = (E:pos() + Legs[2,table]["TOff",vector] + ( E:forward() * 40 ) ):setZ(Z) 
+        Legs[4,table]["OT",vector] = Legs[4,table]["T",vector]
+        Legs[4,table]["NT",vector] = (E:pos() + Legs[4,table]["TOff",vector] + ( E:forward() * 40 ) ):setZ(Z) 
+        
+        ModeB = "move"
+    }elseif(ModeB == "move"){
+        BezierVec = vec2(0,0)
+        BezierVec = (1-BT) ^ 2 * vec2(0,0) + 2*(1-BT)*BT*vec2(70,10)+BT^2*vec2(100,0)
+        
+        
+        Legs[5,table]["T",vector] = mix(Legs[5,table]["NT",vector],Legs[5,table]["OT",vector],BezierVec:x()/100)
+        Legs[5,table]["T",vector] = Legs[5,table]["T",vector] + vec(0,0,BezierVec:y())
+        Legs[7,table]["T",vector] = mix(Legs[7,table]["NT",vector],Legs[7,table]["OT",vector],BezierVec:x()/100)
+        Legs[7,table]["T",vector] = Legs[7,table]["T",vector] + vec(0,0,BezierVec:y())
+        Legs[2,table]["T",vector] = mix(Legs[2,table]["NT",vector],Legs[2,table]["OT",vector],BezierVec:x()/100)
+        Legs[2,table]["T",vector] = Legs[2,table]["T",vector] + vec(0,0,BezierVec:y())
+        Legs[4,table]["T",vector] = mix(Legs[4,table]["NT",vector],Legs[4,table]["OT",vector],BezierVec:x()/100)
+        Legs[4,table]["T",vector] = Legs[4,table]["T",vector] + vec(0,0,BezierVec:y())
+            
+            
+            
+            
+            
+            
+        BT = BT + 0.1
+        if(BT >= 1){
+            BT = 0
+            ModeB = "wait"
+            Legs[5,table]["T",vector] = Legs[5,table]["NT",vector] 
+            Legs[7,table]["T",vector] = Legs[7,table]["NT",vector] 
+            Legs[2,table]["T",vector] = Legs[2,table]["NT",vector] 
+            Legs[4,table]["T",vector] = Legs[4,table]["NT",vector] 
+        }
+    }
+
+
+    
+
+for(I = 1, 8)
+{   
+    IO = Legs[I,table]["IOff",number] 
+    T =  Legs[I,table]["T",vector]
+    
+    ALen = Legs[I,table]["ALen",number]
+    BLen = Legs[I,table]["BLen",number]
+    CLen = Legs[I,table]["CLen",number]
+    DLen = Legs[I,table]["DLen",number]
+    FLen = Legs[I,table]["FLen",number]
+    
+    
+    A = BLen
+    B = DLen
+    # - ((T:setZ(0) - holoEntity(IO + 2):pos():setZ(0)):normalized() * CLen ):setZ(0)
+    T1 = ((T:setZ(0) - holoEntity(IO + 2):pos():setZ(0)):normalized() * CLen ):setZ(0) 
+    T2 = ((T - holoEntity(IO + 2):pos()):normalized() * FLen ) 
+    C = min( (T - T1 - T2):distance(holoEntity(IO + 2):pos()),A+B)
+    
+    
+    A1 = acos(((A^2) + (C^2) - (B^2)) / ( 2*A*C ))
+    A2 = acos(((A^2) + (B^2) - (C^2)) / ( 2*A*B ))
+    
+  
+    holoAng(IO + 1,ang( 0,(T - holoEntity(IO + 1):pos()):toAngle():yaw() ,0))
+    holoAng(IO + 2,(T - holoEntity(IO + 2):pos()):toAngle() + ang(-A1,0,0))
+    holoAng(IO + 3,ang( 0,(T - holoEntity(IO + 1):pos()):toAngle():yaw() ,0))
+    holoAng(IO + 4,holoEntity(IO + 2):toWorld(ang(180-A2,0,0)))
+    holoAng(IO + 5,(T - holoEntity(IO + 2):pos()):toAngle())
+    
+    # holoAng(1,(E:pos() - Vec1):toAngle() + ang( 180+A11,0,0))
+    # holoAng(2,holoEntity(1):toWorld(ang(180+ A12,0,0)))
+}
+holoAng(1,HAng)
+
+interval(10)
+}
+

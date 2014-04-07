@@ -1,0 +1,25 @@
+@name Trig1
+@inputs Ent:entity
+@outputs 
+@persist 
+@trigger
+
+runOnTick(1)
+
+AS = 50
+BS = 50
+
+CS = Ent:pos():distance(entity():pos())
+
+CAngle = acos(((AS^2) + (BS^2) - (CS^2)) / ( 2*AS*BS ))
+
+
+print(CS)
+print(CAngle)
+
+AtoB = entity():pos() - Ent:pos()
+AtoBA = AtoB:toAngle()
+AtoBA = AtoBA + ang(0,CAngle,0)
+AtoB = AtoBA:forward()
+
+CP = entity():pos() + ( AtoB * 50 )

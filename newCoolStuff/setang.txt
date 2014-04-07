@@ -1,0 +1,22 @@
+@name SetAng
+@inputs Base:entity L R
+@outputs 
+@persist Steer
+@trigger 
+@model models/sprops/rectangles/size_2/rect_12x12x3.mdl
+
+runOnTick(1)
+
+
+
+if(!entity():isPlayerHolding()){
+entity():propFreeze(1)
+}
+
+entity():setAng(Base:toWorld(ang(0,Steer,0)))
+
+if(R && !L ){Steer++}elseif(L && !R){Steer--}elseif(!R && !L)
+{
+if(Steer > 0){Steer--}elseif(Steer<0){Steer++}   
+}
+if(Steer > 35){Steer = 35}elseif(Steer < -35){Steer = -35}

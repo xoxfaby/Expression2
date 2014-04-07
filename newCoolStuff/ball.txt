@@ -1,0 +1,41 @@
+@name Buddy 
+@inputs 
+@outputs 
+@persist X Y DX DY LastX LastY
+@trigger
+runOnTick(1)
+#hq_cube
+#hq_cylinder
+
+if(first())
+{
+    X = 1
+    Y = 1
+    holoCreate(1,entity():pos() + vec(0,0,3),vec(100,100,1),ang(0,0,0),vec(0,0,0))
+    holoModel(1,"hq_cube")
+    holoCreate(2,entity():pos() + vec(0,0,5),vec(10,10,1),ang(0,0,0),vec(255,255,255))  
+    holoModel(2,"hq_cylinder")
+}
+
+if(X < 0){ DX = 0 - DX, X = 0}
+if(Y < 0){ DY = 0 - DY, Y = 0}
+if(X > 400){ DX = 0 - DX,  X = 400}
+if(Y > 400){ DY = 0 - DY,  Y = 400}
+
+Xdiff = LastX - entity():pos():x() 
+Ydiff = LastY - entity():pos():y() 
+
+LastX = entity():pos():x() 
+LastY = entity():pos():y() 
+
+
+DX = Xdiff
+DY = Ydiff
+
+
+X = X + DX
+Y = Y + DY
+
+holoPos(1,entity():pos())
+holoPos(2,holoEntity(1):pos() - vec(200,200,-1) + vec(X,Y,0) )
+

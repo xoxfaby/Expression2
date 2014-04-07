@@ -1,0 +1,66 @@
+@name chatSounds
+@inputs 
+@outputs 
+@persist 
+@trigger 
+
+runOnChat(1)
+if(first()){
+holoCreate(1)
+holoAlpha(1,0)   
+}
+if(chatClk()){
+MsgA = lastSaid():explode(" ")
+Msg = lastSaid()
+MsgL = lastSaid():lower()
+Pl = lastSpoke()
+
+holoPos(1,Pl:pos() + vec(0,0,100))
+Pl = holoEntity(1)
+if(MsgL:find("said") != 0 && MsgL:find("i") != 0 && MsgL:find("pick") != 0 && MsgL:find("up") != 0 && MsgL:find("the") != 0 && MsgL:find("can") != 0)
+{
+    Pl:soundPlay(1,5,"npc/metropolice/vo/pickupthecan3.wav")
+}
+elseif(MsgL:find("pick") != 0 && MsgL:find("up") != 0 && MsgL:find("that") != 0 && MsgL:find("can") != 0)
+{
+    Pl:soundPlay(1,5,"npc/metropolice/vo/pickupthecan1.wav")
+}
+elseif(MsgL:find("pick") != 0 && MsgL:find("up") != 0 && MsgL:find("the") != 0 && MsgL:find("can") != 0)
+{
+    Pl:soundPlay(1,5,"npc/metropolice/vo/pickupthecan2.wav")
+}
+elseif(MsgL:find("orgasm1"))
+{
+    Pl:soundPlay(1,5,"vo/npc/Alyx/gasp02.wav")
+}
+elseif(MsgL:find("orgasm2"))
+{
+    Pl:soundPlay(1,5,"vo/npc/Alyx/gasp03.wav")
+}
+elseif(MsgL:find("orgasm3"))
+{
+    Pl:soundPlay(1,5,"vo/npc/Alyx/hurt05.wav")
+}
+elseif(MsgL:find("orgasm4"))
+{
+    Pl:soundPlay(1,5,"vo/npc/Alyx/gasp03.wav")
+}
+elseif(MsgL:find("orgasm5"))
+{
+    Pl:soundPlay(1,5,"vo/npc/Alyx/ohgod01.wav")
+}
+elseif(MsgL:find("orgasm6"))
+{
+    Pl:soundPlay(1,5,"vo/npc/female01/ow02.wav")
+}
+elseif(MsgL:find("ok") || MsgL:find("okay"))
+{
+    Pl:soundPlay(1,5,"vo/npc/female01/ok02.wav")
+}
+
+
+
+
+
+
+}
